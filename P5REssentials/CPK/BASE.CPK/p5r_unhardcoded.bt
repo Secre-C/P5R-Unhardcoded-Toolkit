@@ -1,0 +1,213 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+LittleEndian();
+
+typedef struct
+{
+	float unk0[2];
+	float PlayerIconX1;
+	float PlayerIconY1;
+	float unk1[8];
+	float MainIconX1;
+	float MainIconY1;
+	float MainIconX2;
+	float MainIconY2;
+	float unk2[4];
+	float SelectKanjiX1;
+	float SelectKanjiY1;
+	float KanjiX2;
+	float KanjiY2;
+	float LabelX1;
+	float LabelY1;
+	float LabelX2;
+	float LabelY2;
+	float OuterTopLeftLabelBoxX;
+	float OuterTopLeftLabelBoxY;
+	float OuterTopRightLabelBoxX;
+	float OuterTopRightLabelBoxY;
+	float OuterBottomLeftLabelBoxX;
+	float OuterBottomLeftLabelBoxY;
+	float OuterBottomRightLabelBoxX;
+	float OuterBottomRightLabelBoxY;
+	float InnerTopLeftLabelBoxX;
+	float InnerTopLeftLabelBoxY;
+	float InnerTopRightLabelBoxX;
+	float InnerTopRightLabelBoxY;
+	float InnerBottomLeftLabelBoxX;
+	float InnerBottomLeftLabelBoxY;
+	float InnerBottomRightLabelBoxX;
+	float InnerBottomRightLabelBoxY;
+	ubyte MainSpdId;
+	ubyte MainSpd2Unused;
+	ubyte KanjiSpdId;
+	ubyte LableSpdId;
+}lmapParams<read=lmapParamRead>;
+
+string lmapParamRead( lmapParams &o )
+{
+	local string s;
+	SPrintf(s, "SPD IDs: Main -> %03d; Kanji -> %03d; Label -> %03d", o.MainSpdId, o.KanjiSpdId, o.LableSpdId);	
+	return s;
+}
+
+typedef struct
+{
+	int CorpTblIndex;
+	int FlagMaybe<format=hex>;
+}lmapCmmIds<read=lmapCmmIdsRead>;
+
+string lmapCmmIdsRead( lmapCmmIds &o )
+{
+	local string s;
+	SPrintf(s, "Corptbl Index -> %02d; flag? -> %05x", o.CorpTblIndex, o.FlagMaybe);	
+	return s;
+}
+
+local int place = 0;
+
+typedef struct
+{
+	local int isNegative1 = 0;
+	while (!isNegative1)
+	{
+		struct
+		{
+			local string s;
+			short FieldMajorId;
+			short FieldMinorId;
+			isNegative1 = (FieldMajorId == -1 && FieldMinorId == -1);
+		}FieldIds<read=(Str("Field -> F%03d_%03d", FieldMajorId, FieldMinorId))>;
+		place = place + 1;
+	}
+	isNegative1 = 0;
+}lmapCmmFieldIds;
+
+typedef struct
+{
+	local int i;
+	while (i < 36)
+	{
+		lmapCmmFieldIds data;
+		i++;
+	}
+}lmapCmmFields;
+
+
+typedef struct
+{
+	while (place < FileSize() / 4)
+	{
+		lmapCmmFieldIds data;
+	}
+}lmapImageTable;
+
+typedef struct
+{
+	char name[0x20];
+}lmapImageName<read=name>;
+
+typedef struct
+{
+	local string s;
+	short Original_ArcanaId;
+	short New_ArcanaId;
+}cmmFriend<read=(SPrintf(s, "%02d -> %02d", Original_ArcanaId, New_ArcanaId)), optimize=false>;
+
+typedef struct
+{
+	short paramIndex<name="Icon Param Index">;
+	char Chat_Name_Tag[0x1e];
+    char padding[0x10]<hidden=true>;
+	
+	local string s;
+	if (o.paramIndex == -1)
+	{
+		SPrintf(s, "Name File End");
+	}
+	else
+	{
+		SPrintf(s, "Param Index -> %03d; Name Tag -> %s", o.paramIndex, o.Chat_Name_Tag);	
+	}
+	
+}nameIds<read=s>;
+
+typedef struct
+{
+	short unk0;
+	short chatSPD_ID;
+	float IconXOffset;
+	float IconYOffset;
+	float IconScale;
+	float IconRotation;
+	float PreviewIconXOffset;
+	float PreviewIconYOffset;
+	float PreviewIconScale;
+	float PreviewIconRotate;
+	int unk2[4];
+}iconParams<read=Str("Spd ID -> %03d", chatSPD_ID)>;
+
+local int64 fileSize = FileSize();
+local string filePath = GetFileName();
+local string fileName = FileNameGetBase( filePath, false );
+
+typedef struct( string fileName, int64 fileSize )
+{
+		switch ( fileName )
+		{
+			case "lmapParams":
+				lmapParams data[36];
+				break;
+			
+			case "lmapCmmIds":
+				lmapCmmIds data [FileSize() / 8];
+				break;
+			
+			case "lmapCmmFields":
+				lmapCmmFields data;
+				break;
+				
+			case "map_l_table":
+			lmapImageTable data;
+			break;
+				
+			case "map_l_names":
+			lmapImageName data [fileSize / 0x20];
+			break;
+			
+			case "ChatBgColors":
+				uint chatColor[FileSize() / 4]<format=hex>;
+				break;
+			
+			case "ChatNameIds_En":
+			case "ChatNameIds_Fr":
+			case "ChatNameIds_It":
+			case "ChatNameIds_De":
+			case "ChatNameIds_Es":
+				nameIds data[FileSize() / 48]<optimize=false>;
+				break;
+			
+			case "ChatIconParams":
+				iconParams data[FileSize() / 52]<optimize=false>;
+				break;
+			
+			case "cmmFriendTable":
+				cmmFriend data[fileSize / 4];
+				break;
+				
+			default:
+			byte Field00[fileSize];
+			break;
+		}
+}UnhardcodedStructs;
+
+UnhardcodedStructs data ( fileName, fileSize );
