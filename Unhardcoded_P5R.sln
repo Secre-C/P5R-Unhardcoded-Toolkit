@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unhardcoded_P5R", "Unhardcoded_P5R.csproj", "{E9D439DD-029C-4A79-A73B-77532889D1EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9D439DD-029C-4A79-A73B-77532889D1EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9D439DD-029C-4A79-A73B-77532889D1EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9D439DD-029C-4A79-A73B-77532889D1EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9D439DD-029C-4A79-A73B-77532889D1EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2A6F54F-8CF2-45D3-9EC9-2F6B53C4516F}
+	EndGlobalSection
+EndGlobal

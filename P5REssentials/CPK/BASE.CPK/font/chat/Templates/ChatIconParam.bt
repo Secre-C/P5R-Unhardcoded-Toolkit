@@ -1,0 +1,37 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+LittleEndian();
+
+typedef struct
+{
+	short unk0;
+	short chatSPD_ID;
+	float IconXOffset;
+	float IconYOffset;
+	float IconScale;
+	float IconRotation;
+	float PreviewIconXOffset;
+	float PreviewIconYOffset;
+	float PreviewIconScale;
+	float PreviewIconRotate;
+	int unk2[4];
+}iconParams<read=iconParamRead>;
+
+string iconParamRead( iconParams &o )
+{
+	local string s;
+	SPrintf(s, "Spd ID -> %03d", o.chatSPD_ID);
+	return s;
+}
+
+iconParams data[FileSize() / 52]<optimize=false>;

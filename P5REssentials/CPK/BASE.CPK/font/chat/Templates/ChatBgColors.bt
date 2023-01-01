@@ -1,0 +1,16 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: ChatBgColors.bt
+//   Authors: SecreC.
+//   Version: 1.0
+//   Purpose: to edit chat icon background colors
+//  Category: 
+// File Mask: ChatBgColors.bt
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+LittleEndian();
+
+uint chatColor[ FileSize() / 4 ]<format=hex>;

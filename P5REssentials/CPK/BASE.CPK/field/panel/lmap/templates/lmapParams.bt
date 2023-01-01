@@ -1,0 +1,63 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+LittleEndian();
+
+typedef struct
+{
+	float unk0[2];
+	float PlayerIconX1;
+	float PlayerIconY1;
+	float unk1[8];
+	float MainIconX1;
+	float MainIconY1;
+	float MainIconX2;
+	float MainIconY2;
+	float unk2[4];
+	float SelectKanjiX1;
+	float SelectKanjiY1;
+	float KanjiX2;
+	float KanjiY2;
+	float LabelX1;
+	float LabelY1;
+	float LabelX2;
+	float LabelY2;
+	float OuterTopLeftLabelBoxX;
+	float OuterTopLeftLabelBoxY;
+	float OuterTopRightLabelBoxX;
+	float OuterTopRightLabelBoxY;
+	float OuterBottomLeftLabelBoxX;
+	float OuterBottomLeftLabelBoxY;
+	float OuterBottomRightLabelBoxX;
+	float OuterBottomRightLabelBoxY;
+	float InnerTopLeftLabelBoxX;
+	float InnerTopLeftLabelBoxY;
+	float InnerTopRightLabelBoxX;
+	float InnerTopRightLabelBoxY;
+	float InnerBottomLeftLabelBoxX;
+	float InnerBottomLeftLabelBoxY;
+	float InnerBottomRightLabelBoxX;
+	float InnerBottomRightLabelBoxY;
+	ubyte MainSpdId;
+	ubyte MainSpd2Unused;
+	ubyte KanjiSpdId;
+	ubyte LableSpdId;
+}nameIds<read=lmapParamRead>;
+
+string lmapParamRead( nameIds &o )
+{
+	local string s;
+	SPrintf(s, "SPD IDs: Main -> %03d; Kanji -> %03d; Label -> %03d", o.MainSpdId, o.KanjiSpdId, o.LableSpdId);	
+	return s;
+}
+
+nameIds data[FileSize() / 180]<optimize=false>;

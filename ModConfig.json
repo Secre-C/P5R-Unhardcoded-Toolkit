@@ -1,0 +1,25 @@
+{
+  "ModId": "p5rpc.unhardcodedp5r",
+  "ModName": "Unhardcoded P5R",
+  "ModAuthor": "SecreC",
+  "ModVersion": "1.0.0",
+  "ModDescription": "A Project to Unhardcode as many aspects of p5r as possible by making the game read data from external files",
+  "ModDll": "Unhardcoded_P5R.dll",
+  "ModIcon": "Preview.png",
+  "ModR2RManagedDll32": "x86/Unhardcoded_P5R.dll",
+  "ModR2RManagedDll64": "x64/Unhardcoded_P5R.dll",
+  "ModNativeDll32": "",
+  "ModNativeDll64": "",
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "Unhardcoded_P5R.ReleaseMetadata.json",
+  "PluginData": {},
+  "IsUniversalMod": false,
+  "ModDependencies": [
+    "p5rpc.modloader",
+    "Reloaded.Memory.SigScan.ReloadedII",
+    "reloaded.sharedlib.hooks"
+  ],
+  "OptionalDependencies": [],
+  "SupportedAppId": [ "p5r.exe" ],
+  "ProjectUrl": ""
+}
