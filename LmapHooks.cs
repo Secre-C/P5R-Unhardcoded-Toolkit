@@ -298,6 +298,7 @@ namespace Unhardcoded_P5R
 
                 _loadLmapFtds = hooks.CreateHook<LoadLmapFtds>((a1) =>
                 {
+                    utils.DebugLog("GetMapImage", Color.Red);
                     if (!hooksDone)
                     {
                         LmapParamHooks(hooks, utils, lmapParamTable);
@@ -325,6 +326,7 @@ namespace Unhardcoded_P5R
 
                 _getMapImage = hooks.CreateHook<GetMapImage>((a1) =>
                 {
+                    utils.DebugLog("GetMapImage", Color.Red);
                     int iVar1;
                     long lVar2;
                     uint CurrentFieldMinor;
@@ -336,13 +338,15 @@ namespace Unhardcoded_P5R
 
                     if (iVar1 >= 1)
                     {
+                        utils.DebugLog("return iVar1");
                         return iVar1;
                     }
 
                     lVar2 = (long)_FUN_14eec6d60();
 
-                    if (lVar2 != 0)
+                    if (lVar2 == 0)
                     {
+                        utils.DebugLog("return -1");
                         return -1;
                     }
 
@@ -385,6 +389,7 @@ namespace Unhardcoded_P5R
 
                                             string mapImageNameString = Encoding.ASCII.GetString(mapImageNameBytes).TrimEnd('\0');
 
+                                            utils.DebugLog($"{mapImageNameString}/");
                                             mapImageNameStringPtrArray[i] = (long)utils.Sprintf($"field/panel/lmap/map_l_{mapImageNameString}.dds");
                                         }
 
@@ -439,6 +444,7 @@ namespace Unhardcoded_P5R
 
                 _loadLmapImage = hooks.CreateHook<LoadLmapImage>((a1, a2) =>
                 {
+                    utils.DebugLog("LoadLmapImage", Color.Red);
                     bool bVar1;
                     bool bVar2;
                     char cVar3;
