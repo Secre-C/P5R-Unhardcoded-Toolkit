@@ -7,7 +7,7 @@
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <OutputPath>$(RELOADEDIIMODS)/Unhardcoded_P5R</OutputPath>
+    <OutputPath>$(RELOADEDIIMODS)/p5rpc.unhardcodedp5r</OutputPath>
     <Deterministic>true</Deterministic>
     <ImplicitUsings>enable</ImplicitUsings>
 

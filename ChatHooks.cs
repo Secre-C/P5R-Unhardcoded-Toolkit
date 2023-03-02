@@ -151,6 +151,8 @@ namespace Unhardcoded_P5R
                 long getChatNameId = result.Offset + utils.baseAddress;
                 utils.DebugLog($"Found getChatNameId -> {getChatNameId:X8}");
 
+                bool hooksDone = false;
+
                 _getChatNameId = hooks.CreateHook<GetChatNameId>((a1) =>
                 {
                     var newFile = utils.OpenFile(newNameFile[*(byte*)lang], 0);
@@ -159,8 +161,13 @@ namespace Unhardcoded_P5R
 
                     short ChatID = *(short*)(fileAddress + (a1 * 8));
 
-                    IconColorHooks(hooks, utils, chatIconPreviewBgColor, chatIconBgColor);
-                    IconParamHooks(hooks, utils, chatIconParam_RAX, chatIconParam_RCX, chatIconLimit);
+                    if (!hooksDone)
+                    {
+                        IconColorHooks(hooks, utils, chatIconPreviewBgColor, chatIconBgColor);
+                        IconParamHooks(hooks, utils, chatIconParam_RAX, chatIconParam_RCX, chatIconLimit);
+                        hooksDone = true;
+                    }
+
                     return ChatID;
                 }, getChatNameId).Activate();
             });

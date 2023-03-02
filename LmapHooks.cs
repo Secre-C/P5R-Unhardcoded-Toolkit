@@ -254,7 +254,9 @@ namespace Unhardcoded_P5R
                 lmapIdtoPointerIndexAdr = result.Offset + utils.baseAddress;
                 utils.DebugLog($"Found lmapIdtoPointerIndexAdr -> {lmapIdtoPointerIndexAdr:X8}");
 
-                _lmapIdtoFieldListPointerIndex = hooks.CreateHook<LmapIdtoFieldListPointerIndex>((a1) => {
+                _lmapIdtoFieldListPointerIndex = hooks.CreateHook<LmapIdtoFieldListPointerIndex>((a1) => 
+                {
+                    //utils.DebugLog($"Called Function: LmapIdtoFieldListPointerIndex at {lmapIdtoPointerIndexAdr:X8}", Color.LightSlateGray);
                     return a1;
                 }, lmapIdtoPointerIndexAdr).Activate();
             });
@@ -298,6 +300,7 @@ namespace Unhardcoded_P5R
 
                 _loadLmapFtds = hooks.CreateHook<LoadLmapFtds>((a1) =>
                 {
+                    utils.DebugLog($"Called Function: LoadLmapFtds at {loadLmapFtdsAdr:X8}", Color.LightSlateGray);
                     if (!hooksDone)
                     {
                         LmapParamHooks(hooks, utils, lmapParamTable);
@@ -325,6 +328,8 @@ namespace Unhardcoded_P5R
 
                 _getMapImage = hooks.CreateHook<GetMapImage>((a1) =>
                 {
+                    utils.DebugLog($"Called Function: GetMapImage at {FUN_14eec6d60adr:X8}", Color.LightSlateGray);
+
                     int iVar1;
                     long lVar2;
                     uint CurrentFieldMinor;
@@ -390,6 +395,7 @@ namespace Unhardcoded_P5R
 
                                         fixed (long* fixedMapImageNameStringPtrArrayAdr = mapImageNameStringPtrArray)
                                         {
+                                            utils.DebugLog($"fixedMapImageNameStringPtrArrayAdr: {(long)fixedMapImageNameStringPtrArrayAdr:X8}", Color.PaleGreen);
                                             mapImageNameStringPtrArrayAdr = fixedMapImageNameStringPtrArrayAdr;
 
                                             string[] mapImageStringPtrAsm = { $"use64", $"mov RCX, [RDI + RCX*0x8 + 0x{(long)mapImageNameStringPtrArrayAdr - utils.baseAddress:X}]" };
@@ -439,6 +445,8 @@ namespace Unhardcoded_P5R
 
                 _loadLmapImage = hooks.CreateHook<LoadLmapImage>((a1, a2) =>
                 {
+                    utils.DebugLog($"Called Function: LoadLmapImage at {lmapImageLoadAdr:X8}", Color.LightSlateGray);
+
                     bool bVar1;
                     bool bVar2;
                     char cVar3;
@@ -504,7 +512,7 @@ namespace Unhardcoded_P5R
                 }, lmapImageLoadAdr).Activate();
             });
         }
-
+        
         private void LmapParamHooks(IReloadedHooks hooks, Utils utils, long lmapParamTable)
         {
             string newLmapFile = @"field/panel/lmap/lmapParams.dat";
@@ -590,6 +598,7 @@ namespace Unhardcoded_P5R
 
             fixed (ulong* fieldIdListOffsetsPtr = fieldIdListOffsets)
             {
+                utils.DebugLog($"fieldIdListOffsetsPtr: {(long)fieldIdListOffsetsPtr:X8}", Color.PaleGreen);
                 for (int i = 0; i < lmapFieldPtrInstructions.Count; i++)
                 {
                     string[] lmapFieldPointerListAsm = { $"use64", $"mov {fieldListPtrRegisters[i]}, 0x{(long)fieldIdListOffsetsPtr:X8}" };

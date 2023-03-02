@@ -110,7 +110,7 @@ namespace Unhardcoded_P5R
                 status = fsSync((long)newFile);
             }
 
-            DebugLog($"Loaded {Encoding.ASCII.GetString(newFile->filename, 128)} To 0x{newFile->pointerToFile}:X8", Color.LightSkyBlue);
+            DebugLog($"Loaded {Encoding.ASCII.GetString(newFile->filename, 128).TrimEnd('\0')} To 0x{newFile->pointerToFile:X8}", Color.LightSkyBlue);
 
             return newFile;
         }
@@ -123,21 +123,21 @@ namespace Unhardcoded_P5R
             [FieldOffset(152)] public long pointerToFile;
         }
 
-        public void Log(string logString)
+        public void Log(object logString)
         {
-            iLogger.WriteLine($"[Unhardcoded P5R] {logString}", Color.DimGray);
+            iLogger.WriteLineAsync($"[Unhardcoded P5R] {logString}", Color.DimGray);
         }
-        public void Log(string logString, Color color)
+        public void Log(object logString, Color color)
         {
-            iLogger.WriteLine($"[Unhardcoded P5R] {logString}", color);
+            iLogger.WriteLineAsync($"[Unhardcoded P5R] {logString}", color);
         }
-        public void DebugLog(string logString)
+        public void DebugLog(object logString)
         {
             if (iConfig.DebugBool)
                 iLogger.WriteLine($"[Unhardcoded P5R DEBUG] {logString}", Color.DimGray);
         }
 
-        public void DebugLog(string logString, Color color)
+        public void DebugLog(object logString, Color color)
         {
             if (iConfig.DebugBool)
                 iLogger.WriteLine($"[Unhardcoded P5R DEBUG] {logString}", color);
