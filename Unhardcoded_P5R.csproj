@@ -117,4 +117,8 @@
     <NativeLibs Remove="ConfidantHooks.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <NativeLibs Remove="SelCutinHooks.cs" />
+  </ItemGroup>
+
 </Project>

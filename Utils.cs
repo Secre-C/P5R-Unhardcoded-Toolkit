@@ -17,7 +17,7 @@ namespace Unhardcoded_P5R
 {
     public unsafe class Utils
     {
-        public delegate fileHandleStruct * Open_File(string a1, int a2, int a3, long a4, int a5);
+        public delegate PtrToFileHandle* Open_File(string a1);
         public delegate int FsSync(long a1);
         public delegate long LoadDDS(string a1);
         public delegate long FlowscriptGetIntArg(int a1);
@@ -46,7 +46,7 @@ namespace Unhardcoded_P5R
             using var thisProcess = Process.GetCurrentProcess();
             baseAddress = thisProcess.MainModule.BaseAddress.ToInt64();
 
-            IScanner.AddMainModuleScan("48 89 5C 24 ?? 89 54 24 ?? 55 41 54", (result) =>
+            IScanner.AddMainModuleScan("48 89 5C 24 ?? 57 48 83 EC 30 BA 10 00 00 00 48 8B F9 8D 4A ?? E8 ?? ?? ?? ?? 48 8B D8 48 85 C0", (result) =>
             {
                 if (!result.Found)
                 {
@@ -54,6 +54,8 @@ namespace Unhardcoded_P5R
                 }
 
                 open_file_adr = result.Offset + baseAddress;
+                DebugLog($"Found Open_File at 0x{open_file_adr:X}");
+
                 openFile = hooks.CreateWrapper<Open_File>(open_file_adr, out IntPtr _openFileWrapper);
             });
 
@@ -65,6 +67,8 @@ namespace Unhardcoded_P5R
                 }
 
                 fsSync_adr = result.Offset + baseAddress;
+                DebugLog($"Found FsSync at 0x{fsSync_adr:X}");
+
                 fsSync = hooks.CreateWrapper<FsSync>(fsSync_adr, out IntPtr _fsSyncWrapper);
             });
 
@@ -76,6 +80,8 @@ namespace Unhardcoded_P5R
                 }
 
                 loadDDSAdr = baseAddress + result.Offset;
+                DebugLog($"Found LoadDDS at 0x{loadDDSAdr:X}");
+
                 loadDDS = hooks.CreateWrapper<LoadDDS>(loadDDSAdr, out IntPtr wrapperAdress);
             });
 
@@ -87,6 +93,8 @@ namespace Unhardcoded_P5R
                 }
 
                 flowscriptGetIntArgAdr = baseAddress + result.Offset;
+                DebugLog($"Found FlowscriptGetIntArg at 0x{flowscriptGetIntArgAdr:X}");
+
                 flowscriptGetIntArg = hooks.CreateWrapper<FlowscriptGetIntArg>(flowscriptGetIntArgAdr, out IntPtr wrapperAdress);
             });
         }
@@ -102,7 +110,8 @@ namespace Unhardcoded_P5R
 
         public fileHandleStruct * OpenFile(string fileName, int openMode)
         {
-            var newFile = openFile(fileName, openMode, -1, 0x1419d02a2, 0);
+            var newFile = openFile(fileName)->ptrtoStruct;
+
             var status = fsSync((long)newFile);
 
             while (status != 1)
@@ -122,6 +131,10 @@ namespace Unhardcoded_P5R
             [FieldOffset(136)] public uint bufferSize;
             [FieldOffset(152)] public long pointerToFile;
         }
+        public unsafe struct PtrToFileHandle
+        {
+            public fileHandleStruct* ptrtoStruct;
+        };
 
         public void Log(object logString)
         {

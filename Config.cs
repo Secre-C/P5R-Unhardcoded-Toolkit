@@ -49,6 +49,11 @@ namespace Unhardcoded_P5R.Configuration
         [Description("Enables unhardcoded shop module. ONLY DISABLE FOR TROUBLESHOOTING")]
         [DefaultValue(true)]
         public bool ShopHooks { get; set; } = true;
+
+        [DisplayName("Select Cutin Module")]
+        [Description("Remove early return when using ID 6 for the SelCutin override")]
+        [DefaultValue(true)]
+        public bool SelCutinHooks { get; set; } = true;
     }
 
     /// <summary>

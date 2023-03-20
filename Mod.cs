@@ -46,6 +46,7 @@ namespace Unhardcoded_P5R
         private LmapHooks _lmapHooks = null!;
         private ShopHooks _shopHooks = null!;
         private ConfidantHooks _confidantHooks = null!;
+        private SelCutinHooks _selCutinHooks = null!;
         public Mod(ModContext context)
         {
             _modLoader = context.ModLoader;
@@ -76,6 +77,9 @@ namespace Unhardcoded_P5R
 
             if (_configuration.ShopHooks)
                 _shopHooks = new ShopHooks(_hooks, _modLoader, _utils);
+
+            if (_configuration.SelCutinHooks)
+                _selCutinHooks = new SelCutinHooks(_hooks, _modLoader, _utils);
         }
 
         #region Standard Overrides
