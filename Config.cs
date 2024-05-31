@@ -55,6 +55,11 @@ namespace Unhardcoded_P5R.Configuration
         [Description("Remove early return when using ID 6 for the SelCutin override")]
         [DefaultValue(true)]
         public bool SelCutinHooks { get; set; } = true;
+
+        [DisplayName("Field Model Num Module")]
+        [Description("Field Model Module Placeholder description")]
+        [DefaultValue(true)]
+        public bool FieldModelNumHooks { get; set; } = true;
     }
 
     /// <summary>

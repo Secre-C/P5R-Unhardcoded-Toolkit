@@ -47,6 +47,7 @@ namespace Unhardcoded_P5R
         private ShopHooks _shopHooks = null!;
         private ConfidantHooks _confidantHooks = null!;
         private SelCutinHooks _selCutinHooks = null!;
+        private FieldModelNumHooks _fieldModelNumHooks = null!;
         public Mod(ModContext context)
         {
             //Debugger.Launch();
@@ -81,6 +82,9 @@ namespace Unhardcoded_P5R
 
             if (_configuration.SelCutinHooks)
                 _selCutinHooks = new SelCutinHooks(_utils);
+
+            if (_configuration.FieldModelNumHooks)
+                _fieldModelNumHooks = new FieldModelNumHooks(_hooks, _utils);
         }
 
         #region Standard Overrides
