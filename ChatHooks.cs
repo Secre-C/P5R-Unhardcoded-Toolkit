@@ -1,45 +1,48 @@
-﻿using Reloaded.Hooks;
-using Reloaded.Hooks.Definitions;
-using Reloaded.Memory.Pointers;
-using Reloaded.Memory.Sigscan;
-using Reloaded.Memory.Sigscan.Definitions;
-using Reloaded.Memory.Sigscan.Definitions.Structs;
-using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
+﻿using Reloaded.Hooks.Definitions;
 using Reloaded.Memory.Sources;
-using Reloaded.Mod.Interfaces;
-using System.Collections;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using static Unhardcoded_P5R.Utils;
 
 namespace Unhardcoded_P5R
 {
     internal unsafe class ChatHooks
     {
+        private delegate nint d_LoadColorFile();
+        private d_LoadColorFile _loadColorFile;
+
+        private delegate nint d_LoadParamFile();
+        private d_LoadParamFile _loadParamFile;
+
         private delegate short GetChatNameId(int a1);
-        private delegate char * GetChatName(int a1);
+        private delegate char* GetChatName(int a1);
 
         private IHook<GetChatNameId> _getChatNameId;
         private IHook<GetChatName> _getChatName;
 
-        private IAsmHook _chatColorBgHook;
-        private IAsmHook _chatColorPrvwBgHook;
+        private AsmHookWrapper _chatColorBgHook;
+        private AsmHookWrapper _chatColorPrvwBgHook;
 
-        private IAsmHook _chatParamHook_RAX;
-        private IAsmHook _chatParamHook_RCX;
-        internal ChatHooks(IReloadedHooks hooks, IModLoader modLoader, Utils utils)
+        private List<AsmHookWrapper> _chatParamHooks;
+
+        private readonly List<nint> _chatIconLimitInstructions;
+
+        private fileHandleStruct* _chatColorTableData;
+        private fileHandleStruct* _chatParamTableData;
+        private fileHandleStruct* _chatNameTableData;
+
+        private readonly Utils _utils;
+        private readonly IReloadedHooks _hooks;
+        internal ChatHooks(IReloadedHooks hooks, Utils utils)
         {
+            _hooks = hooks;
+            _utils = utils;
+
             utils.DebugLog("Loading Chat Module", Color.PaleGreen);
 
-            long lang = 0;
+            byte langIndex = 0;
 
-            long chatIconPreviewBgColor = 0;
-            long chatIconBgColor = 0;
-            long chatIconParam_RCX = 0;
-            List<long> chatIconParam_RAX = new();
-            List<long> chatIconLimit = new();
+            _chatParamHooks = new();
+            _chatIconLimitInstructions = new();
 
             string[] newNameFile =
                 { @"font/Chat/Names/ChatNameIds_En.dat",
@@ -63,177 +66,177 @@ namespace Unhardcoded_P5R
                 "66 41 83 F8 32 72 ??",
             };
 
-            utils.IScanner.AddMainModuleScan("48 8D 15 ?? ?? ?? ?? F3 44 0F 11 7C 24 ?? 4C 8D 0D ?? ?? ?? ??", (result) => //Chat Preview Icon Color Pointer
+            utils.SigScan("48 8D 15 ?? ?? ?? ?? F3 44 0F 11 7C 24 ?? 4C 8D 0D ?? ?? ?? ??", "chatIconPreviewBgColor", (chatIconPreviewBgColor) => // Chat Preview Icon Color Pointer
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find chatIconPreviewBgColor", Color.PaleVioletRed);
-                }
-
-                chatIconPreviewBgColor = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found chatIconPreviewBgColor -> {chatIconPreviewBgColor:X8}");
+                _chatColorPrvwBgHook = RedirectIconColorTable(chatIconPreviewBgColor);
             });
 
-            utils.IScanner.AddMainModuleScan("48 8D 15 ?? ?? ?? ?? 8B 1C ??", (result) => //Chat Icon Background Color Pointer
+            utils.SigScan("48 8D 15 ?? ?? ?? ?? 8B 1C ??", "chatIconBgColor", (chatIconBgColor) => // Chat Icon Background Color Pointer
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find chatIconBgColor", Color.PaleVioletRed);
-                    return;
-                }
-
-                chatIconBgColor = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found chatIconBgColor -> {chatIconBgColor:X8}");
+                _chatColorBgHook = RedirectIconColorTable(chatIconBgColor);
             });
 
             for (int i = 0; i < chatIconParamRaxPatterns.Length; i++)
             {
-                utils.IScanner.AddMainModuleScan(chatIconParamRaxPatterns[i], (result) => //Chat Icon Spd Parameter Pointer
+                utils.SigScan(chatIconParamRaxPatterns[i], $"chatIconParam_RAX_{i}", (result) => //Chat Icon Spd Parameter Pointer
                 {
-                    if (!result.Found)
-                    {
-                        utils.Log($"Could not find chatIconParam_RAX[{i}]", Color.PaleVioletRed);
-                        return;
-                    }
-
-                    chatIconParam_RAX.Add(result.Offset + utils.baseAddress);
-                    utils.DebugLog($"Found chatIconParam_RAX[{i}] -> {result.Offset + utils.baseAddress:X8}");
+                    _chatParamHooks.Add(RedirectIconParamTable(result, false));
                 });
             }
 
-            utils.IScanner.AddMainModuleScan("48 8D 0D ?? ?? ?? ?? 48 6B C0 34", (result) => //Chat Icon Spd Parameter Pointer
+            utils.SigScan("48 8D 0D ?? ?? ?? ?? 48 6B C0 34", "chatIconParam_RCX", (result) => //Chat Icon Spd Parameter Pointer
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find chatIconParam_RCX", Color.PaleVioletRed);
-                    return;
-                }
-
-                chatIconParam_RCX = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found chatIconParam_RCX -> {chatIconParam_RCX:X8}");
+                _chatParamHooks.Add(RedirectIconParamTable(result, true));
             });
 
             for (int i = 0; i < chatIconLimitPatterns.Length; i++)
             {
-                utils.IScanner.AddMainModuleScan(chatIconLimitPatterns[i], (result) =>  //Chat Icon Limit
+                utils.SigScan(chatIconLimitPatterns[i], $"chatIconLimit[{i}]", (result) =>  //Chat Icon Limit
                 {
-                    if (!result.Found)
-                    {
-                        utils.Log($"Could not find chatIconLimit[{i}]", Color.PaleVioletRed);
-                        return;
-                    }
-
-                    chatIconLimit.Add(result.Offset + utils.baseAddress);
-                    utils.DebugLog($"Found chatIconLimit[{i}] -> {result.Offset + utils.baseAddress:X8}");
+                    _chatIconLimitInstructions.Add(result);
                 });
             }
 
-            utils.IScanner.AddMainModuleScan("8B 05 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 48 8B CE", (result) =>
+            utils.SigScan("8B 05 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 48 8B CE", "Global_lang", (result) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find Global lang", Color.PaleVioletRed);
-                    throw new Exception($"Could not find Global lang from signature \"8B 05 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 48 8B CE\"");
-                }
-
-                lang = utils.GetAddressFromGlobalRef(result.Offset + utils.baseAddress, 6);
-                utils.DebugLog($"Found Global lang -> {lang:X8}");
+                langIndex = *(byte*)utils.GetAddressFromGlobalRef(result, 6, "Global_lang");
             });
 
-            utils.IScanner.AddMainModuleScan("0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ??", (result) =>
+            utils.SigScan("0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ??",
+                "getChatNameId", (getChatNameId) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find getChatNameId", Color.PaleVioletRed);
-                    return;
-                }
-
-                long getChatNameId = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found getChatNameId -> {getChatNameId:X8}");
-
-                bool hooksDone = false;
-
                 _getChatNameId = hooks.CreateHook<GetChatNameId>((a1) =>
-                {
-                    var newFile = utils.OpenFile(newNameFile[*(byte*)lang], 0);
+               {
+                   if (_chatNameTableData == null)
+                       _chatNameTableData = utils.OpenFile(newNameFile[langIndex], 0);
 
-                    var fileAddress = newFile->pointerToFile;
-
-                    short ChatID = *(short*)(fileAddress + (a1 * 8));
-
-                    if (!hooksDone)
-                    {
-                        IconColorHooks(hooks, utils, chatIconPreviewBgColor, chatIconBgColor);
-                        IconParamHooks(hooks, utils, chatIconParam_RAX, chatIconParam_RCX, chatIconLimit);
-                        hooksDone = true;
-                    }
-
-                    return ChatID;
-                }, getChatNameId).Activate();
+                   var fileAddress = _chatNameTableData->pointerToFile;
+                   short ChatID = *(short*)(fileAddress + (a1 * 8));
+                   return ChatID;
+               }, getChatNameId).Activate();
             });
 
-            utils.IScanner.AddMainModuleScan("48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ??", (result) =>
+            utils.SigScan("48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ??",
+                    "getChatName", (getChatName) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find getChatName", Color.PaleVioletRed);
-                    return;
-                }
-
-                long getChatName = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found getChatName -> {getChatName:X8}");
-
                 _getChatName = hooks.CreateHook<GetChatName>((a1) =>
                 {
-                    var newFile = utils.OpenFile(newNameFile[*(byte*)lang], 0);
+                    if (_chatNameTableData == null)
+                        _chatNameTableData = utils.OpenFile(newNameFile[langIndex], 0);
 
-                    var fileAddress = newFile->pointerToFile;
-
+                    var fileAddress = _chatNameTableData->pointerToFile;
                     char* result = (char*)(fileAddress + 2 + (a1 * 0x30));
                     return result;
                 }, getChatName).Activate();
             });
         }
 
-        private void IconColorHooks(IReloadedHooks hooks, Utils utils, long chatIconPreviewBgColor, long chatIconBgColor)
+        private AsmHookWrapper RedirectIconColorTable(nint address)
         {
-            string newColorFile = @"font/chat/ChatBgColors.dat";
-            var newFile = utils.OpenFile(newColorFile, 0);
+            _loadColorFile = LoadChatIconColorFile;
 
-            var fileAddress = newFile->pointerToFile;
+            string[] asm =
+            {
+                $"use64",
+                PushCallerRegisters,
+                "sub rsp, 0x20",
+                _hooks.Utilities.GetAbsoluteCallMnemonics(_loadColorFile, out var reverseWrapper),
+                "add rsp, 0x20",
+                PopCallerRegisters,
+                "mov rdx, rax",
+                "movsx rax, r14w"
+            };
 
-            string[] newChatBgColorPtr = { $"use64", $"mov rdx, 0x{fileAddress:X8}" };
+            AsmHookWrapper asmHook;
 
-            _chatColorBgHook = hooks.CreateAsmHook(newChatBgColorPtr, chatIconPreviewBgColor, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-            _chatColorPrvwBgHook = hooks.CreateAsmHook(newChatBgColorPtr, chatIconBgColor, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+            asmHook.reverseWrapper = reverseWrapper;
+            asmHook.asmHook = _hooks.CreateAsmHook(asm, address, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+
+            return asmHook;
         }
 
-        private void IconParamHooks(IReloadedHooks hooks, Utils utils, List<long> chatIconParam_RAX, long chatIconParam_RCX, List<long> chatIconLimit)
+        private nint LoadChatIconColorFile()
         {
-            string newParamFile = @"font/chat/ChatIconParams.dat";
-            var newFile = utils.OpenFile(newParamFile, 0);
+            if (_chatColorTableData != null)
+                return _chatColorTableData->pointerToFile;
 
-            var fileBuffer = newFile->bufferSize;
+            string newColorFile = @"font/chat/ChatBgColors.dat";
+            var colorTableFile = _utils.OpenFile(newColorFile, 0);
 
-            var fileAddress = newFile->pointerToFile;
+            if (colorTableFile == null)
+                throw new Exception($"Failed to load {newColorFile}");
 
-            string[] newParamPointer_RAX = { $"use64", $"mov rax, 0x{fileAddress:X8}" };
-            string[] newParamPointer_RCX = { $"use64", $"mov rcx, 0x{fileAddress:X8}" };
+            _chatColorTableData = colorTableFile;
+            return colorTableFile->pointerToFile;
+        }
 
-            foreach (var param in chatIconParam_RAX)
+        private AsmHookWrapper RedirectIconParamTable(nint address, bool useRCX, int rspAlignmentOffset = 0)
+        {
+            _loadParamFile = LoadChatIconParamFile;
+
+            List<string> asm = new List<string>()
             {
-                _chatParamHook_RAX = hooks.CreateAsmHook(newParamPointer_RAX, param, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-            }
+                $"use64",
+                PushCallerRegisters,
+                "sub rsp, 0x20",
+                _hooks.Utilities.GetAbsoluteCallMnemonics(_loadParamFile, out var reverseWrapper),
+                "add rsp, 0x20",
+                PopCallerRegisters,
+            };
 
-            _chatParamHook_RCX = hooks.CreateAsmHook(newParamPointer_RCX, chatIconParam_RCX, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+            if (useRCX)
+                asm.Add("mov rcx, rax");
+
+            AsmHookWrapper asmHook;
+
+            asmHook.reverseWrapper = reverseWrapper;
+            asmHook.asmHook = _hooks.CreateAsmHook(asm.ToArray(), address, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+
+            return asmHook;
+        }
+
+        private nint LoadChatIconParamFile()
+        {
+            if (_chatParamTableData != null)
+                return _chatParamTableData->pointerToFile;
+
+            string newParamFilePath = @"font/chat/ChatIconParams.dat";
+            var newParamTableFile = _utils.OpenFile(newParamFilePath, 0);
+
+            if (newParamTableFile == null)
+                throw new Exception($"Failed to load {newParamFilePath}");
 
             //Add Variable limit for chat icon slots.
-
             var memory = Memory.Instance;
 
-            memory.SafeWrite(chatIconLimit[0] + 3, (byte)(fileBuffer / 52));
-            memory.SafeWrite(chatIconLimit[1] + 3, (byte)(fileBuffer / 52));
-            memory.SafeWrite(chatIconLimit[2] + 4, (byte)(fileBuffer / 52));
+            var fileBuffer = newParamTableFile->bufferSize;
+
+            memory.SafeWrite(_chatIconLimitInstructions[0] + 3, (byte)(fileBuffer / 52));
+            memory.SafeWrite(_chatIconLimitInstructions[1] + 3, (byte)(fileBuffer / 52));
+            memory.SafeWrite(_chatIconLimitInstructions[2] + 4, (byte)(fileBuffer / 52));
+
+            _chatParamTableData = newParamTableFile;
+            return _chatParamTableData->pointerToFile;
         }
+    }
+
+    class ChatIconParams
+    {
+        internal string Name;
+        internal int Color;
+        internal short Unk0;
+        internal short ChatSPD_ID;
+        internal float IconXOffset;
+        internal float IconYOffset;
+        internal float IconScale;
+        internal float IconRotation;
+        internal float PreviewIconXOffset;
+        internal float PreviewIconYOffset;
+        internal float PreviewIconScale;
+        internal float PreviewIconRotate;
+        internal int Unk2;
+        internal int Unk3;
+        internal int Unk4;
+        internal int Unk5;
     }
 }

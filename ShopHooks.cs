@@ -1,135 +1,115 @@
-﻿using Reloaded.Hooks;
-using Reloaded.Hooks.Definitions;
-using Reloaded.Memory.Pointers;
-using Reloaded.Memory.Sigscan;
-using Reloaded.Memory.Sigscan.Definitions;
-using Reloaded.Memory.Sigscan.Definitions.Structs;
-using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
-using Reloaded.Memory.Sources;
-using Reloaded.Mod.Interfaces;
-using System.Collections;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using Reloaded.Hooks.Definitions;
 using System.Drawing;
-using System.Text;
-using static Unhardcoded_P5R.Utils;
+using System.Runtime.InteropServices;
 
 namespace Unhardcoded_P5R
 {
     internal unsafe class ShopHooks
     {
-        private delegate long LoadShopBanner(long *a1, long a2);
-        private delegate void PlaceShopBanner(long a1, long a2);
+        private delegate long LoadShopBanner(long* a1, ShopInfo* shopInfo);
+        private delegate void PlaceShopBanner(long a1, ShopInfo* shopInfo);
+
+        private delegate long d_GetDDSStringAdr();
 
         private IHook<LoadShopBanner> _loadShopBanner;
         private IHook<PlaceShopBanner> _placeShopBanner;
 
         private IAsmHook _shop2BannerStringPtr;
+        private IReverseWrapper _reverseWrapper;
 
-        internal ShopHooks(IReloadedHooks hooks, IModLoader modLoader, Utils utils)
+        int currentDisplayingShopBanner = 0;
+        long Shop2BannerStringPtr = 0;
+        nint shopTablePointers = 0;
+
+        internal ShopHooks(IReloadedHooks hooks, Utils utils)
         {
             utils.DebugLog("Loading Shop Module", Color.PaleGreen);
 
-            long loadShopBannerAdr = 0;
+            utils.SigScan("48 8B 05 ?? ?? ?? ?? 48 8B 74 24 ?? 49 89 BE ?? ?? ?? ??", "fclPublicShopDataTablePtr", (result) =>
+                shopTablePointers = utils.GetAddressFromGlobalRef(result, 7, "shopDataTable"));
 
-            long fclPublicShopDataTablePtr = 0;
-
-            long Shop2BannerStringPtrInstr = 0;
-            long Shop2BannerStringPtr = 0;
-
-            long placeShopBannerAdr = 0;
-
-            utils.IScanner.AddMainModuleScan("48 8B 05 ?? ?? ?? ?? 48 8B 74 24 ?? 49 89 BE ?? ?? ?? ??", (result) =>
+            utils.SigScan("48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? 66 83 FA 03", "Shop2BannerStringPtrInstr", (Shop2BannerStringPtrInstr) => // 0x14100a474
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find Global fclPublicShopDataTablePtr", Color.PaleVioletRed);
-                    throw new Exception($"Could not find Global fclPublicShopDataTablePtr from signature \"48 8B 05 ?? ?? ?? ?? 48 8B 74 24 ?? 49 89 BE ?? ?? ?? ??\"");
-                }
+                Shop2BannerStringPtr = utils.GetAddressFromGlobalRef(Shop2BannerStringPtrInstr, 7, "Shop2BannerStringPtr");
 
-                fclPublicShopDataTablePtr = utils.GetAddressFromGlobalRef(result.Offset + utils.baseAddress, 7);
-                utils.DebugLog($"Found Global fclPublicShopDataTablePtr -> {fclPublicShopDataTablePtr:X8}");
+                var getStringFunc = new d_GetDDSStringAdr(GetDDSStringAdr);
+                string[] asm =
+                {
+                    "use64",
+                    Utils.PushCallerRegisters,
+                    hooks.Utilities.GetAbsoluteCallMnemonics(getStringFunc, out var reverseWrapper),
+                    Utils.PopCallerRegisters,
+                    "mov rcx, rax"
+                };
+
+                _reverseWrapper = reverseWrapper;
+                _shop2BannerStringPtr = hooks.CreateAsmHook(asm, Shop2BannerStringPtrInstr, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             });
 
-            utils.IScanner.AddMainModuleScan("48 8D 0D ?? ?? ?? ?? E9 ?? ?? ?? ?? 66 83 FA 03", (result) =>
+            utils.SigScan("48 89 5C 24 ?? 48 89 7C 24 ?? 41 56 48 83 EC 60", "LoadShopBanner", (loadShopBannerAdr) =>
             {
-                if (!result.Found)
+                _loadShopBanner = hooks.CreateHook<LoadShopBanner>((a1, shopInfo) =>
                 {
-                    utils.Log("Could not find Global Shop2BannerStringPtrInstr", Color.PaleVioletRed);
-                    throw new Exception($"Could not find Global Shop2BannerStringPtr from signature \"48 8B 05 ?? ?? ?? ?? 48 8B 74 24 ?? 49 89 BE ?? ?? ?? ??\"");
-                }
+                    var shopDataTable = GetShopDataTable();
+                    short shopId = shopInfo->shopId;
+                    short bannerId = shopDataTable[shopId].bannerId;
+                    utils.DebugLog($"Banner -> {bannerId}");
+                    currentDisplayingShopBanner = bannerId;
 
-                Shop2BannerStringPtrInstr = result.Offset + utils.baseAddress;
-                Shop2BannerStringPtr = utils.GetAddressFromGlobalRef(Shop2BannerStringPtrInstr, 7);
-                utils.DebugLog($"Found Global Shop2BannerStringPtrInstr -> {Shop2BannerStringPtrInstr:X8}");
-                utils.DebugLog($"Found Global Shop2BannerStringPtr -> {Shop2BannerStringPtr:X8}");
-            });
+                    if (useCustomShopBanner())
+                        shopDataTable[shopId].bannerId = 2;
 
-            utils.IScanner.AddMainModuleScan("48 89 5C 24 ?? 48 89 7C 24 ?? 41 56 48 83 EC 60", (result) =>
-            {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find LoadShopBanner Function", Color.PaleVioletRed);
-                    return;
-                }
-
-                loadShopBannerAdr = utils.baseAddress + result.Offset;
-                utils.DebugLog($"Found LoadShopBanner -> {loadShopBannerAdr:X8}");
-                _loadShopBanner = hooks.CreateHook<LoadShopBanner>((a1, a2) =>
-                {
-                    long ddsStringAdr;
-
-                    long lVar3 = fclPublicShopDataTablePtr;
-
-                    short ShopId = *(short*)(a2 + 0xC6);
-                    short BannerId = *(short*)(*(long*)lVar3 + 0x30 + (ShopId * 4));
-                    utils.DebugLog($"Banner -> {BannerId}");
-
-                    if (BannerId > 41 && BannerId < 99)
-                    {
-                        ddsStringAdr = (long)utils.Sprintf($"facility/fcl_ps_title/h_name_{BannerId:D2}.dds");
-                        string[] newBannerAsmHook = { $"use64", $"mov rcx, {ddsStringAdr}" };
-                        _shop2BannerStringPtr = hooks.CreateAsmHook(newBannerAsmHook, Shop2BannerStringPtrInstr, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                        *(short*)(*(long*)lVar3 + 0x30 + (ShopId * 4)) = 2; //sets the BannerId to 2 to prevent crashes
-                    }
-                    else if (BannerId == 2)
-                    {
-                        string[] newBannerAsmHook = { $"use64", $"mov rcx, {Shop2BannerStringPtr}" };
-                        _shop2BannerStringPtr = hooks.CreateAsmHook(newBannerAsmHook, Shop2BannerStringPtrInstr, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                    }
-
-                    long result = _loadShopBanner.OriginalFunction(a1, a2);
-                    *(short*)(*(long*)lVar3 + 0x30 + (ShopId * 4)) = BannerId;
+                    long result = _loadShopBanner.OriginalFunction(a1, shopInfo);
+                    shopDataTable[shopId].bannerId = bannerId;
                     return result;
 
                 }, loadShopBannerAdr).Activate();
             });
 
-            utils.IScanner.AddMainModuleScan("4C 8B DC 49 89 53 ?? 55 41 54 41 55 48 81 EC E0 00 00 00", (result) =>
+            utils.SigScan("4C 8B DC 49 89 53 ?? 55 41 54 41 55 48 81 EC E0 00 00 00", "PlaceShopBanner", (placeShopBannerAdr) =>
             {
-                if (!result.Found)
+                _placeShopBanner = hooks.CreateHook<PlaceShopBanner>((a1, shopInfo) =>
                 {
-                    utils.Log("Could not find PlaceShopBanner Function", Color.PaleVioletRed);
-                }
+                    var shopDataTable = GetShopDataTable();
+                    short shopId = shopInfo->shopId;
+                    short bannerId = shopDataTable[shopId].bannerId;
 
-                placeShopBannerAdr = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found PlaceShopBanner -> {placeShopBannerAdr:X8}");
+                    if (useCustomShopBanner())
+                        shopDataTable[shopId].bannerId = 2; //sets the BannerId to 2 temporarily to place the shop Banner correctly
 
-                _placeShopBanner = hooks.CreateHook<PlaceShopBanner>((a1, a2) =>
-                {
-                    long lVar3 = fclPublicShopDataTablePtr;
+                    _placeShopBanner.OriginalFunction(a1, shopInfo);
 
-                    short ShopId = *(short*)(a2 + 0xC6);
-                    short BannerId = *(short*)(*(long*)lVar3 + 0x30 + (ShopId * 4));
-
-                    *(short*)(*(long*)lVar3 + 0x30 + (ShopId * 4)) = 2; //sets the BannerId to 2 temporarily to place the shop Banner correctly
-
-                    _placeShopBanner.OriginalFunction(a1, a2);
-
-                    *(short*)(*(long*)lVar3 + 0x30 + (ShopId * 4)) = BannerId; //sets the BannerId back to what it was before
+                    shopDataTable[shopId].bannerId = bannerId; // revert bannerId
 
                 }, placeShopBannerAdr).Activate();
             });
+        }
+
+        private bool useCustomShopBanner()
+            => currentDisplayingShopBanner > 41 && currentDisplayingShopBanner < 99;
+        private long GetDDSStringAdr()
+        {
+            if (useCustomShopBanner())
+                return Marshal.StringToHGlobalAnsi($"facility/fcl_ps_title/h_name_{currentDisplayingShopBanner:D2}.dds");
+            else
+                return Shop2BannerStringPtr;
+        }
+
+        private ShopDataTable* GetShopDataTable() => (ShopDataTable*)(*(long*)shopTablePointers + 0x30);
+
+        [StructLayout(LayoutKind.Explicit)]
+        private struct ShopInfo
+        {
+            [FieldOffset(0xc6)]
+            internal short shopId;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Size = 0x4)]
+        private struct ShopDataTable
+        {
+            internal short bannerId;
+            internal bool hideNameTag;
+            internal byte mode;
         }
     }
 }

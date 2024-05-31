@@ -3,11 +3,11 @@
  * to make it easier to upgrade to newer versions of the template.
 */
 
-using Unhardcoded_P5R.Configuration;
-using Unhardcoded_P5R.Template.Configuration;
 using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
 using Reloaded.Mod.Interfaces.Internal;
+using Unhardcoded_P5R.Configuration;
+using Unhardcoded_P5R.Template.Configuration;
 
 namespace Unhardcoded_P5R.Template
 {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <LangVersion>10.0</LangVersion>
@@ -38,49 +38,7 @@
     <Content Include="ModConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Update="P5REssentials\CPK\BASE.CPK\field\panel\lmap\lmapCmmFields.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\field\panel\lmap\lmapCmmIds.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\field\panel\lmap\lmapParams.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\field\panel\lmap\map_l_names.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\field\panel\lmap\map_l_table.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\field\panel\lmap\templates\lmapParams.bt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\font\chat\ChatBgColors.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\font\chat\ChatIconParams.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\font\chat\Names\ChatNameIds_De.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\font\chat\Names\ChatNameIds_En.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\font\chat\Names\ChatNameIds_Es.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\font\chat\Names\ChatNameIds_Fr.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\font\chat\Names\ChatNameIds_It.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\init\cmm\cmmFriendTable.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="P5REssentials\CPK\BASE.CPK\p5r_unhardcoded.bt">
+    <None Update="P5REssentials\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Preview.png">
@@ -119,6 +77,14 @@
 
   <ItemGroup>
     <NativeLibs Remove="SelCutinHooks.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NativeLibs Remove="ItemIcons.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NativeLibs Remove="FieldModelNumHooks.cs" />
   </ItemGroup>
 
 </Project>

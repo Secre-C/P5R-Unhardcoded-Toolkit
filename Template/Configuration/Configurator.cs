@@ -1,5 +1,5 @@
-﻿using Unhardcoded_P5R.Configuration;
-using Reloaded.Mod.Interfaces;
+﻿using Reloaded.Mod.Interfaces;
+using Unhardcoded_P5R.Configuration;
 
 namespace Unhardcoded_P5R.Template.Configuration
 {

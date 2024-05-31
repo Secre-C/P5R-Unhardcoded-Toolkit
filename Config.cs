@@ -1,5 +1,6 @@
-﻿using Unhardcoded_P5R.Template.Configuration;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Runtime.InteropServices;
+using Unhardcoded_P5R.Template.Configuration;
 
 namespace Unhardcoded_P5R.Configuration
 {

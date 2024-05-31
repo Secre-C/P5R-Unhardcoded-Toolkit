@@ -1,18 +1,5 @@
-﻿using Reloaded.Hooks;
-using Reloaded.Hooks.Definitions;
-using Reloaded.Memory.Pointers;
-using Reloaded.Memory.Sigscan;
-using Reloaded.Memory.Sigscan.Definitions;
-using Reloaded.Memory.Sigscan.Definitions.Structs;
-using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
-using Reloaded.Memory.Sources;
-using Reloaded.Mod.Interfaces;
-using System.Collections;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using Reloaded.Hooks.Definitions;
 using System.Drawing;
-using System.Text;
-using static Unhardcoded_P5R.Utils;
 
 namespace Unhardcoded_P5R
 {
@@ -30,7 +17,7 @@ namespace Unhardcoded_P5R
         IHook<Cmm_Friend> _cmm_Friend;
         IHook<CmmCheckFriend> _cmmCheckFriend;
         IHook<CmmGetFriendId> _cmmGetFriendId;
-        internal ConfidantHooks(IReloadedHooks hooks, IModLoader modLoader, Utils utils)
+        internal ConfidantHooks(IReloadedHooks hooks, Utils utils)
         {
             utils.DebugLog("Loading Confidant Module", Color.PaleGreen);
 
@@ -44,76 +31,35 @@ namespace Unhardcoded_P5R
             long DAT_142a63ee0 = 0;
             long ConfidantSavePtr = 0;
 
-            utils.IScanner.AddMainModuleScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 48 89 7C 24 ?? 41 56 48 83 EC 20 33 ED 4C 8D 35 ?? ?? ?? ?? 0F B7 DD", (result) =>
+            utils.SigScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 48 89 7C 24 ?? 41 56 48 83 EC 20 33 ED 4C 8D 35 ?? ?? ?? ?? 0F B7 DD", "FUN_140d8e660Adr", (result) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find FUN_140d8e660Adr", Color.PaleVioletRed);
-                    return;
-                }
-
-                FUN_140d8e660Adr = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found FUN_140d8e660Adr -> {FUN_140d8e660Adr:X8}");
+                FUN_140d8e660Adr = result;
             });
 
-            utils.IScanner.AddMainModuleScan("48 89 5C 24 ?? 48 89 7C 24 ?? 0F B7 C1", (result) =>
+            utils.SigScan("48 89 5C 24 ?? 48 89 7C 24 ?? 0F B7 C1", "FUN_140d8e2b0Adr", (result) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find FUN_140d8e2b0Adr", Color.PaleVioletRed);
-                    return;
-                }
-
-                FUN_140d8e2b0Adr = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found FUN_140d8e2b0Adr -> {FUN_140d8e2b0Adr:X8}");
+                FUN_140d8e2b0Adr = result;
             });
 
-            utils.IScanner.AddMainModuleScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 48 8B 2D ?? ?? ?? ?? 33 FF", (result) =>
+            utils.SigScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 48 8B 2D ?? ?? ?? ?? 33 FF", "FUN_140d8e090Adr", (result) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find FUN_140d8e090Adr", Color.PaleVioletRed);
-                    return;
-                }
-
-                FUN_140d8e090Adr = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found FUN_140d8e090Adr -> {FUN_140d8e090Adr:X8}");
+                FUN_140d8e090Adr = result;
             });
 
-            utils.IScanner.AddMainModuleScan("48 8B 05 ?? ?? ?? ?? 48 85 C0 74 ?? 48 8B 48 ?? 48 85 C9 74 ?? 0F B7 01 EB ?? 8B C7 0F B7 C0", (result) =>
+            utils.SigScan("48 8B 05 ?? ?? ?? ?? 48 85 C0 74 ?? 48 8B 48 ?? 48 85 C9 74 ?? 0F B7 01 EB ?? 8B C7 0F B7 C0", "DAT_142a63ee0", (result) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find Global DAT_142a63ee0", Color.PaleVioletRed);
-                    throw new Exception($"Could not find Global DAT_142a63ee0 from signature \"48 8B 05 ?? ?? ?? ?? 48 85 C0 74 ?? 48 8B 48 ?? 48 85 C9 74 ?? 0F B7 01 EB ?? 8B C7 0F B7 C0\"");
-                }
-
-                DAT_142a63ee0 = utils.GetAddressFromGlobalRef(result.Offset + utils.baseAddress, 7);
-                utils.DebugLog($"Found Global DAT_142a63ee0 -> {DAT_142a63ee0:X8}");
+                DAT_142a63ee0 = utils.GetAddressFromGlobalRef(result, 7, "DAT_142a63ee0");
             });
 
-            utils.IScanner.AddMainModuleScan("48 8B 1D ?? ?? ?? ?? 48 83 C3 02 66 39 53 ??", (result) =>
+            utils.SigScan("48 8B 1D ?? ?? ?? ?? 48 83 C3 02 66 39 53 ??", "ConfidantSavePtr", (result) =>
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find Global ConfidantSavePtr", Color.PaleVioletRed);
-                    throw new Exception($"Could not find Global ConfidantSavePtr from signature \"48 8B 1D ?? ?? ?? ?? 48 83 C3 02 66 39 53 ??\"");
-                }
-
-                ConfidantSavePtr = utils.GetAddressFromGlobalRef(result.Offset + utils.baseAddress, 7);
-                utils.DebugLog($"Found Global ConfidantSavePtr -> {ConfidantSavePtr:X8}");
+                ConfidantSavePtr = utils.GetAddressFromGlobalRef(result, 7, "ConfidantSavePtr");
             });
 
-            utils.IScanner.AddMainModuleScan("40 57 48 83 EC 20 33 C9 E8 ?? ?? ?? ?? 8B C8", (result) => //Flowscript Function CMM_FRIEND
+            utils.SigScan("40 57 48 83 EC 20 33 C9 E8 ?? ?? ?? ?? 8B C8", "cmm_FriendAdr", (result) => //Flowscript Function CMM_FRIEND
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find cmm_FriendAdr", Color.PaleVioletRed);
-                    return;
-                }
+                cmm_FriendAdr = result;
 
-                cmm_FriendAdr = utils.baseAddress + result.Offset;
-                utils.DebugLog($"Found cmm_FriendAdr -> {cmm_FriendAdr:X8}");
                 long cmmFriendTableAdr = 0;
                 long cmmFriendTableBuffer = 0;
 
@@ -190,16 +136,10 @@ namespace Unhardcoded_P5R
                 }, cmm_FriendAdr).Activate();
             });
 
-            utils.IScanner.AddMainModuleScan("0F B7 C1 83 C0 FD 83 F8 1F", (result) => // 0x140d8d930
+            utils.SigScan("0F B7 C1 83 C0 FD 83 F8 1F", "cmmCheckFriendAdr", (result) => // 0x140d8d930
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find cmmCheckFriendAdr", Color.PaleVioletRed);
-                    return;
-                }
+                cmmCheckFriendAdr = result;
 
-                cmmCheckFriendAdr = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found cmmCheckFriendAdr -> {cmmCheckFriendAdr:X8}");
                 long cmmFriendTableAdr = 0;
                 long cmmFriendTableBuffer = 0;
 
@@ -252,17 +192,10 @@ namespace Unhardcoded_P5R
                 }, cmmCheckFriendAdr).Activate();
             });
 
-            utils.IScanner.AddMainModuleScan("0F B7 C1 83 C0 FD 83 F8 22", (result) => // 0x140d8de80 breaks kawakami????
+            utils.SigScan("0F B7 C1 83 C0 FD 83 F8 22", "cmmGetFriendId", (result) => // 0x140d8de80 breaks kawakami????
             {
-                if (!result.Found)
-                {
-                    utils.Log("Could not find cmmGetFriendId", Color.PaleVioletRed);
-                    return;
-                }
-
                 long cmmFriendFileAdr = 0;
-                long cmmGetFriendId = result.Offset + utils.baseAddress;
-                utils.DebugLog($"Found cmmGetFriendId -> {cmmGetFriendId:X8}");
+                long cmmGetFriendId = result;
                 long bufferSize = 0;
 
                 _cmmGetFriendId = hooks.CreateHook<CmmGetFriendId>((a1) =>

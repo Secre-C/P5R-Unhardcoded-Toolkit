@@ -1,7 +1,7 @@
-﻿using Unhardcoded_P5R.Configuration;
-using Unhardcoded_P5R.Template;
-using Reloaded.Hooks.ReloadedII.Interfaces;
+﻿using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
+using Unhardcoded_P5R.Configuration;
+using Unhardcoded_P5R.Template;
 
 namespace Unhardcoded_P5R
 {
@@ -49,6 +49,7 @@ namespace Unhardcoded_P5R
         private SelCutinHooks _selCutinHooks = null!;
         public Mod(ModContext context)
         {
+            //Debugger.Launch();
             _modLoader = context.ModLoader;
             _hooks = context.Hooks;
             _logger = context.Logger;
@@ -67,19 +68,19 @@ namespace Unhardcoded_P5R
             _utils = new Utils(_hooks, _logger, _modLoader, _configuration);
 
             if (_configuration.ChatHooks)
-                _chatHooks = new ChatHooks(_hooks, _modLoader, _utils);
+                _chatHooks = new ChatHooks(_hooks, _utils);
 
             if (_configuration.LmapHooks)
-                _lmapHooks = new LmapHooks(_hooks, _modLoader, _utils);
+                _lmapHooks = new LmapHooks(_hooks, _utils);
 
             if (_configuration.ConfidantHooks)
-                _confidantHooks = new ConfidantHooks(_hooks, _modLoader, _utils);
+                _confidantHooks = new ConfidantHooks(_hooks, _utils);
 
             if (_configuration.ShopHooks)
-                _shopHooks = new ShopHooks(_hooks, _modLoader, _utils);
+                _shopHooks = new ShopHooks(_hooks, _utils);
 
             if (_configuration.SelCutinHooks)
-                _selCutinHooks = new SelCutinHooks(_hooks, _modLoader, _utils);
+                _selCutinHooks = new SelCutinHooks(_utils);
         }
 
         #region Standard Overrides
