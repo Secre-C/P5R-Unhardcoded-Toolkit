@@ -87,4 +87,8 @@
     <NativeLibs Remove="FieldModelNumHooks.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <NativeLibs Remove="Converters.cs" />
+  </ItemGroup>
+
 </Project>

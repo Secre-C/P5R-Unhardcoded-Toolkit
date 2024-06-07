@@ -1,242 +1,357 @@
 ﻿using Reloaded.Hooks.Definitions;
+using Reloaded.Hooks.Definitions.X64;
 using Reloaded.Memory.Sources;
+using Reloaded.Mod.Interfaces;
+using Reloaded.Mod.Interfaces.Internal;
+using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using static Reloaded.Hooks.Definitions.X64.FunctionAttribute;
 using static Unhardcoded_P5R.Utils;
 
 namespace Unhardcoded_P5R
 {
     internal unsafe class ChatHooks
     {
-        private delegate nint d_LoadColorFile();
-        private d_LoadColorFile _loadColorFile;
+        [Function(new[] { Register.rdx, Register.rax }, Register.rdx, true, new[] {Register.r8})]
+        private delegate uint d_GetIconBgColor(nint colorTable, short index);
+        private d_GetIconBgColor _getIconBgColor;
 
-        private delegate nint d_LoadParamFile();
-        private d_LoadParamFile _loadParamFile;
+        [Function(CallingConventions.Microsoft)]
+        private delegate nint d_GetIconParams(nint colorTable, nint ogOffset);
+        private d_GetIconParams _getIconParams;
+
+        [Function(Register.rdi, Register.rdi, true)]
+        private delegate int d_CreateExpandedChatNameList(int numOfOriginalEntries);
+        private d_CreateExpandedChatNameList _createExpandedChatNameList;
 
         private delegate short GetChatNameId(int a1);
-        private delegate char* GetChatName(int a1);
+        private delegate nint GetChatName(int a1);
 
         private IHook<GetChatNameId> _getChatNameId;
         private IHook<GetChatName> _getChatName;
 
-        private AsmHookWrapper _chatColorBgHook;
-        private AsmHookWrapper _chatColorPrvwBgHook;
-
-        private List<AsmHookWrapper> _chatParamHooks;
-
-        private readonly List<nint> _chatIconLimitInstructions;
-
-        private fileHandleStruct* _chatColorTableData;
-        private fileHandleStruct* _chatParamTableData;
-        private fileHandleStruct* _chatNameTableData;
+        private List<AsmHookWrapper> _asmHookWrappers;
 
         private readonly Utils _utils;
         private readonly IReloadedHooks _hooks;
-        internal ChatHooks(IReloadedHooks hooks, Utils utils)
+        private readonly IModLoader _modLoader;
+
+        private Dictionary<int, ChatIconParams> _chatIconParamIdDict;
+        private Dictionary<int, ChatIconParams> _expandedChatIconParamDict;
+        internal ChatHooks(IModLoader modLoader, IReloadedHooks hooks, Utils utils)
         {
+            //Debugger.Launch();
             _hooks = hooks;
             _utils = utils;
+            _modLoader = modLoader;
+
+            _getIconBgColor = GetChatIconBgColor;
+            _getIconParams = GetChatIconParams;
+            _createExpandedChatNameList = CreateExpandedChatNameList;
+
+            _chatIconParamIdDict = new();
+            _expandedChatIconParamDict = new();
+
+            _modLoader.ModLoading += OnModLoading;
+
+            var chatJsonPath = Path.Join(_modLoader.GetDirectoryForModId("p5rpc.unhardcodedp5r"), "UnhardcodedP5R", "ChatIconParams.json");
+            ReadChatIconParamFile(chatJsonPath);
 
             utils.DebugLog("Loading Chat Module", Color.PaleGreen);
 
-            byte langIndex = 0;
+            _asmHookWrappers = new();
 
-            _chatParamHooks = new();
-            _chatIconLimitInstructions = new();
+            /* Color */
 
-            string[] newNameFile =
-                { @"font/Chat/Names/ChatNameIds_En.dat",
-                @"font/chat/Names/ChatNameIds_Fr.dat",
-                @"font/chat/Names/ChatNameIds_It.dat",
-                @"font/chat/Names/ChatNameIds_De.dat",
-                @"font/chat/Names/ChatNameIds_Es.dat" };
-
-            string[] chatIconParamRaxPatterns =
+            utils.SigScan("8B 14 ?? 8B CA 8B C2 C1 E9 08 88 4C 24", "chatIconPreviewBgColor", (chatIconPreviewBgColor) => // Chat Preview Icon Color Pointer 0x1417d7a03
             {
-                "48 8D 05 ?? ?? ?? ?? 48 03 F8 F3 44 0F 10 AC 24 ?? ?? ?? ??",
-                "48 8D 05 ?? ?? ?? ?? 48 03 D8 66 83 3B ??",
-                "48 8D 05 ?? ?? ?? ?? 48 03 C8 48 8B C1",
-                "48 8D 05 ?? ?? ?? ?? 48 03 F8 66 39 1F"
-            };
-
-            string[] chatIconLimitPatterns =
-            {
-                "66 83 FB 32 73 ?? 66 41 3B DE",
-                "66 83 F8 32 0F 83 ?? ?? ?? ??",
-                "66 41 83 F8 32 72 ??",
-            };
-
-            utils.SigScan("48 8D 15 ?? ?? ?? ?? F3 44 0F 11 7C 24 ?? 4C 8D 0D ?? ?? ?? ??", "chatIconPreviewBgColor", (chatIconPreviewBgColor) => // Chat Preview Icon Color Pointer
-            {
-                _chatColorPrvwBgHook = RedirectIconColorTable(chatIconPreviewBgColor);
-            });
-
-            utils.SigScan("48 8D 15 ?? ?? ?? ?? 8B 1C ??", "chatIconBgColor", (chatIconBgColor) => // Chat Icon Background Color Pointer
-            {
-                _chatColorBgHook = RedirectIconColorTable(chatIconBgColor);
-            });
-
-            for (int i = 0; i < chatIconParamRaxPatterns.Length; i++)
-            {
-                utils.SigScan(chatIconParamRaxPatterns[i], $"chatIconParam_RAX_{i}", (result) => //Chat Icon Spd Parameter Pointer
+                string[] asm =
                 {
-                    _chatParamHooks.Add(RedirectIconParamTable(result, false));
-                });
-            }
+                    $"use64",
+                    _hooks.Utilities.GetAbsoluteCallMnemonics(_getIconBgColor, out var reverseWrapper),
+                    "mov ecx, edx",
+                    "mov eax, edx",
+                };
 
-            utils.SigScan("48 8D 0D ?? ?? ?? ?? 48 6B C0 34", "chatIconParam_RCX", (result) => //Chat Icon Spd Parameter Pointer
-            {
-                _chatParamHooks.Add(RedirectIconParamTable(result, true));
-            });
-
-            for (int i = 0; i < chatIconLimitPatterns.Length; i++)
-            {
-                utils.SigScan(chatIconLimitPatterns[i], $"chatIconLimit[{i}]", (result) =>  //Chat Icon Limit
+                _asmHookWrappers.Add(new AsmHookWrapper
                 {
-                    _chatIconLimitInstructions.Add(result);
+                    reverseWrapper = reverseWrapper,
+                    asmHook = _hooks.CreateAsmHook(asm, chatIconPreviewBgColor, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate()
                 });
-            }
-
-            utils.SigScan("8B 05 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 48 8B CE", "Global_lang", (result) =>
-            {
-                langIndex = *(byte*)utils.GetAddressFromGlobalRef(result, 6, "Global_lang");
             });
 
-            utils.SigScan("0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ?? 48 03 C9 0F B7 84 ?? ?? ?? ?? ?? C3 48 63 C1 48 8D 0C ??",
-                "getChatNameId", (getChatNameId) =>
+            utils.SigScan("66 85 C9 78 ?? F3 0F 10 0D", "chatIconBgColor", (chatIconBgColor) => // Chat Icon Background Color Pointer 0x1417d7dd3
             {
-                _getChatNameId = hooks.CreateHook<GetChatNameId>((a1) =>
-               {
-                   if (_chatNameTableData == null)
-                       _chatNameTableData = utils.OpenFile(newNameFile[langIndex], 0);
+                string[] asm =
+                {
+                    $"use64",
+                    _hooks.Utilities.GetAbsoluteCallMnemonics(_getIconBgColor, out var reverseWrapper),
+                    "mov rbx, rdx",
+                };
 
-                   var fileAddress = _chatNameTableData->pointerToFile;
-                   short ChatID = *(short*)(fileAddress + (a1 * 8));
-                   return ChatID;
-               }, getChatNameId).Activate();
+                _asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    reverseWrapper = reverseWrapper,
+                    asmHook = _hooks.CreateAsmHook(asm, chatIconBgColor, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
+                });
             });
 
-            utils.SigScan("48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ?? 48 C1 E0 04 48 03 C1 C3 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04 ??",
+            utils.SigScan("41 8B 94 ?? ?? ?? ?? ?? 8B CA 8B C2 C1 E9 08 88 4C 24", "chatPhotoSenderIconBgColor", (chatIconBgColor) => // Chat Icon Background Color Pointer 0x1417c81ef
+            {
+                nint hookInstruction = chatIconBgColor + 8;
+                nint colorTableAddress = (nint)(*(int*)(chatIconBgColor + 4) + 0x140000000);
+                
+                string[] asm =
+                {
+                    $"use64",
+                    $"mov rdx, {colorTableAddress}",
+                    _hooks.Utilities.GetAbsoluteCallMnemonics(_getIconBgColor, out var reverseWrapper),
+                };
+
+                _asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    reverseWrapper = reverseWrapper,
+                    asmHook = _hooks.CreateAsmHook(asm, hookInstruction, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
+                });
+            });
+
+            /* Params */
+
+            utils.SigScan("F3 44 0F 10 AC 24 ?? ?? ?? ?? 41 0F 28 CD F3 0F 59 0D ?? ?? ?? ?? 0F 28 C1 E8 ?? ?? ?? ?? 66 44 39 27", "GroupIconParam", (chatIconBgColor) => // Chat Icon Spd Parameter Pointer 0x1417c72e8
+            {
+                string[] asm =
+                {
+                    $"use64",
+                    "mov RCX, RAX",
+                    "mov RDX, RDI",
+                    _hooks.Utilities.GetAbsoluteCallMnemonics(_getIconParams, out var reverseWrapper),
+                    "mov rdi, rax",
+                };
+
+                _asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    reverseWrapper = reverseWrapper,
+                    asmHook = _hooks.CreateAsmHook(asm, chatIconBgColor, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
+                });
+            });
+
+            utils.SigScan("66 83 3B ?? 0F BF 53", "ImageSenderIconParam", (chatIconBgColor) => // Chat Icon Spd Parameter Pointer 0x1417c7a71
+            {
+                string[] asm =
+                {
+                    $"use64",
+                    "mov RCX, RAX",
+                    "mov RDX, RBX",
+                    _hooks.Utilities.GetAbsoluteCallMnemonics(_getIconParams, out var reverseWrapper),
+                    "mov rbx, rax",
+                };
+
+                _asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    reverseWrapper = reverseWrapper,
+                    asmHook = _hooks.CreateAsmHook(asm, chatIconBgColor, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
+                });
+            });
+
+            utils.SigScan("66 39 1F 4C 8B 3D", "ChatIconParam", (chatIconBgColor) => // Chat Icon Spd Parameter Pointer 0x1417c72e8
+            {
+                string[] asm =
+                {
+                    $"use64",
+                    "mov RCX, RAX",
+                    "mov RDX, RDI",
+                    _hooks.Utilities.GetAbsoluteCallMnemonics(_getIconParams, out var reverseWrapper),
+                    "mov rdi, rax",
+                };
+
+                _asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    reverseWrapper = reverseWrapper,
+                    asmHook = _hooks.CreateAsmHook(asm, chatIconBgColor, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
+                });
+            });
+
+            // nop id bounds checks
+            _utils.SigScan("73 ?? 66 41 3B DE", (result) =>
+            {
+                Memory.Instance.SafeWrite(result, (ushort)0x9090);
+            });
+
+            _utils.SigScan("0F 83 ?? ?? ?? ?? 66 83 F8 01", (result) =>
+            {
+                Memory.Instance.SafeWrite(result, (ushort)0x9090);
+                Memory.Instance.SafeWrite(result + 2, (uint)0x90909090);
+            });
+
+            // 0x1417d75ca patch in jmp instruction
+            _utils.SigScan("72 ?? 44 8B F3 F3 44 0F 10 84 24", (chatIconLimit) =>
+            {
+                Memory.Instance.SafeWrite(chatIconLimit, (byte)0xeb);
+            });
+
+            utils.SigScan("8D 04 ?? BA 10 00 00 00 C1 E0 04 8B C8", "chatParamAlloc", (result) =>
+            {
+                string[] asm =
+                {
+                    $"use64",
+                    _hooks.Utilities.GetAbsoluteCallMnemonics(_createExpandedChatNameList, out var reverseWrapper),
+                    "mov rdi, rax"
+                };
+
+                _asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    reverseWrapper = reverseWrapper,
+                    asmHook = _hooks.CreateAsmHook(asm, result, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
+                });
+            });
+
+            //utils.SigScan("8B C7 BA 10 00 00 00 C1 E0 05", "chatParamAlloc2", (result) =>
+            //{
+            //    string[] asm =
+            //    {
+            //        $"use64",
+            //        _hooks.Utilities.GetAbsoluteCallMnemonics(_createExpandedChatNameList, out var reverseWrapper),
+            //    };
+            //
+            //    _asmHookWrappers.Add(new AsmHookWrapper
+            //    {
+            //        reverseWrapper = reverseWrapper,
+            //        asmHook = _hooks.CreateAsmHook(asm, result, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
+            //    });
+            //});
+
+            utils.SigScan("48 63 05 ?? ?? ?? ?? 83 F8 0A 0F 87 ?? ?? ?? ?? 4C 8D 05 ?? ?? ?? ?? 41 8B 94 ?? ?? ?? ?? ?? 49 03 D0 FF E2 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04",
                     "getChatName", (getChatName) =>
             {
                 _getChatName = hooks.CreateHook<GetChatName>((a1) =>
-                {
-                    if (_chatNameTableData == null)
-                        _chatNameTableData = utils.OpenFile(newNameFile[langIndex], 0);
+                {            
+                    if (_expandedChatIconParamDict.TryGetValue(a1, out var chatIconParams))
+                    {
+                        return Marshal.StringToHGlobalAnsi(chatIconParams.Name);
+                    }
 
-                    var fileAddress = _chatNameTableData->pointerToFile;
-                    char* result = (char*)(fileAddress + 2 + (a1 * 0x30));
-                    return result;
+                    return _getChatName.OriginalFunction(a1);
                 }, getChatName).Activate();
             });
+
+            utils.SigScan("48 63 05 ?? ?? ?? ?? 83 F8 0A 0F 87 ?? ?? ?? ?? 48 8D 15 ?? ?? ?? ?? 8B 84 ?? ?? ?? ?? ?? 48 03 C2 FF E0 48 63 C1 48 8D 0C",
+                    "getChatId", (getChatId) =>
+                    {
+                        _getChatNameId = hooks.CreateHook<GetChatNameId>((a1) =>
+                        {
+                            if (_expandedChatIconParamDict.TryGetValue(a1, out var chatIconParams))
+                            {
+                                return chatIconParams.Id;
+                            }
+
+                            return _getChatNameId.OriginalFunction(a1);
+                        }, getChatId).Activate();
+                    });
         }
 
-        private AsmHookWrapper RedirectIconColorTable(nint address)
+        private void OnModLoading(IModV1 mod, IModConfigV1 modConfig)
         {
-            _loadColorFile = LoadChatIconColorFile;
+            var chatIconParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "ChatIconParams.json");
+            ReadChatIconParamFile(chatIconParamFilePath);
+        }
 
-            string[] asm =
+        private void ReadChatIconParamFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return;
+
+            var options = new JsonSerializerOptions
             {
-                $"use64",
-                PushCallerRegisters,
-                "sub rsp, 0x20",
-                _hooks.Utilities.GetAbsoluteCallMnemonics(_loadColorFile, out var reverseWrapper),
-                "add rsp, 0x20",
-                PopCallerRegisters,
-                "mov rdx, rax",
-                "movsx rax, r14w"
+                PropertyNameCaseInsensitive = true,
+                IncludeFields = true,
             };
 
-            AsmHookWrapper asmHook;
+            var iconParams = (List<ChatIconParams>)JsonSerializer.Deserialize(File.ReadAllText(filePath), typeof(List<ChatIconParams>), options);
 
-            asmHook.reverseWrapper = reverseWrapper;
-            asmHook.asmHook = _hooks.CreateAsmHook(asm, address, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-
-            return asmHook;
-        }
-
-        private nint LoadChatIconColorFile()
-        {
-            if (_chatColorTableData != null)
-                return _chatColorTableData->pointerToFile;
-
-            string newColorFile = @"font/chat/ChatBgColors.dat";
-            var colorTableFile = _utils.OpenFile(newColorFile, 0);
-
-            if (colorTableFile == null)
-                throw new Exception($"Failed to load {newColorFile}");
-
-            _chatColorTableData = colorTableFile;
-            return colorTableFile->pointerToFile;
-        }
-
-        private AsmHookWrapper RedirectIconParamTable(nint address, bool useRCX, int rspAlignmentOffset = 0)
-        {
-            _loadParamFile = LoadChatIconParamFile;
-
-            List<string> asm = new List<string>()
+            foreach (var param in iconParams)
             {
-                $"use64",
-                PushCallerRegisters,
-                "sub rsp, 0x20",
-                _hooks.Utilities.GetAbsoluteCallMnemonics(_loadParamFile, out var reverseWrapper),
-                "add rsp, 0x20",
-                PopCallerRegisters,
-            };
-
-            if (useRCX)
-                asm.Add("mov rcx, rax");
-
-            AsmHookWrapper asmHook;
-
-            asmHook.reverseWrapper = reverseWrapper;
-            asmHook.asmHook = _hooks.CreateAsmHook(asm.ToArray(), address, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-
-            return asmHook;
+                _chatIconParamIdDict[param.Id] = param;
+            }
         }
 
-        private nint LoadChatIconParamFile()
+        private nint GetChatIconParams(nint paramTable, nint ogOffset)
         {
-            if (_chatParamTableData != null)
-                return _chatParamTableData->pointerToFile;
+            short index = (short)((ogOffset - paramTable) / 52);
+            if (_chatIconParamIdDict.TryGetValue(index, out var iconParams))
+            {
+                fixed (void* p_iconParams = &iconParams.Unk0)
+                {
+                    return (nint)p_iconParams;
+                }
+            }
 
-            string newParamFilePath = @"font/chat/ChatIconParams.dat";
-            var newParamTableFile = _utils.OpenFile(newParamFilePath, 0);
+            return ogOffset;
+        }
 
-            if (newParamTableFile == null)
-                throw new Exception($"Failed to load {newParamFilePath}");
+        private uint GetChatIconBgColor(nint colorTable, short index)
+        {
+            if (_chatIconParamIdDict.TryGetValue(index, out var iconParams))
+            {
+                return iconParams.Color;
+            }
 
-            //Add Variable limit for chat icon slots.
-            var memory = Memory.Instance;
+            return *(uint*)(colorTable + (index * 4));
+        }
 
-            var fileBuffer = newParamTableFile->bufferSize;
+        private int CreateExpandedChatNameList(int numOfEntries)
+        {
+            foreach (var entry in _chatIconParamIdDict.Values)
+            {
+                if (_expandedChatIconParamDict.TryAdd(numOfEntries, entry))
+                    _utils.Log($"Adding ID {numOfEntries}");
+                numOfEntries++;
+            }
 
-            memory.SafeWrite(_chatIconLimitInstructions[0] + 3, (byte)(fileBuffer / 52));
-            memory.SafeWrite(_chatIconLimitInstructions[1] + 3, (byte)(fileBuffer / 52));
-            memory.SafeWrite(_chatIconLimitInstructions[2] + 4, (byte)(fileBuffer / 52));
-
-            _chatParamTableData = newParamTableFile;
-            return _chatParamTableData->pointerToFile;
+            return numOfEntries;
         }
     }
 
-    class ChatIconParams
+    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+    public class ChatIconParams
     {
-        internal string Name;
-        internal int Color;
-        internal short Unk0;
-        internal short ChatSPD_ID;
-        internal float IconXOffset;
-        internal float IconYOffset;
-        internal float IconScale;
-        internal float IconRotation;
-        internal float PreviewIconXOffset;
-        internal float PreviewIconYOffset;
-        internal float PreviewIconScale;
-        internal float PreviewIconRotate;
-        internal int Unk2;
-        internal int Unk3;
-        internal int Unk4;
-        internal int Unk5;
+        [FieldOffset(0)]
+        public short Unk0;
+        [FieldOffset(2)]
+        public short ChatSPD_ID;
+        [FieldOffset(4)]
+        public float IconXOffset;
+        [FieldOffset(8)]
+        public float IconYOffset;
+        [FieldOffset(12)]
+        public float IconScale;
+        [FieldOffset(16)]
+        public float IconRotation;
+        [FieldOffset(20)]
+        public float PreviewIconXOffset;
+        [FieldOffset(24)]
+        public float PreviewIconYOffset;
+        [FieldOffset(28)]
+        public float PreviewIconScale;
+        [FieldOffset(32)]
+        public float PreviewIconRotate;
+        [FieldOffset(36)]
+        public int Unk2;
+        [FieldOffset(40)]
+        public int Unk3;
+        [FieldOffset(44)]
+        public int Unk4;
+        [FieldOffset(48)]
+        public int Unk5;
+
+        [FieldOffset(0x34)]
+        public short Id;
+        [FieldOffset(0x38)]
+        public string Name;
+
+        [FieldOffset(0x40), JsonConverter(typeof(HexStringJsonConverter))]
+        public uint Color;
     }
 }

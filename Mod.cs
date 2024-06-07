@@ -69,7 +69,7 @@ namespace Unhardcoded_P5R
             _utils = new Utils(_hooks, _logger, _modLoader, _configuration);
 
             if (_configuration.ChatHooks)
-                _chatHooks = new ChatHooks(_hooks, _utils);
+                _chatHooks = new ChatHooks(_modLoader, _hooks, _utils);
 
             if (_configuration.LmapHooks)
                 _lmapHooks = new LmapHooks(_hooks, _utils);

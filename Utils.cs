@@ -11,30 +11,32 @@ namespace Unhardcoded_P5R
 {
     public unsafe class Utils
     {
-        public delegate bool FileExists(string filepath);
-        public delegate PtrToFileHandle* d_OpenFile(string a1);
-        public delegate int FsSync(fileHandleStruct* a1);
-        public delegate long LoadDDS(string a1);
-        public delegate long FlowscriptGetIntArg(int a1);
+        internal delegate bool FileExists(string filepath);
+        internal delegate PtrToFileHandle* d_OpenFile(string a1);
+        internal delegate int FsSync(fileHandleStruct* a1);
+        internal delegate long LoadDDS(string a1);
+        internal delegate long FlowscriptGetIntArg(int a1);
 
-        public d_OpenFile openFile;
-        public FsSync fsSync;
-        public LoadDDS loadDDS { get; set; }
-        public FlowscriptGetIntArg flowscriptGetIntArg { get; set; }
+        internal d_OpenFile openFile;
+        internal FsSync fsSync;
+        internal LoadDDS loadDDS { get; set; }
+        internal FlowscriptGetIntArg flowscriptGetIntArg { get; set; }
         internal FileExists fileExists { get; set; }
 
-        public IStartupScanner IScanner { get; set; }
-        public ILogger iLogger;
-        public Config iConfig;
-        public long baseAddress { get; set; }
+        internal IReloadedHooks _hooks;
+        internal IStartupScanner IScanner { get; set; }
+        internal ILogger iLogger;
+        internal Config iConfig;
+        internal long baseAddress { get; set; }
 
-        public static readonly string PushCallerRegisters = "push rcx\npush rdx\npush r8\npush r9";
-        public static readonly string PopCallerRegisters = "pop r9\npop r8\npop rdx\npop rcx";
+        internal static readonly string PushCallerRegisters = "push rcx\npush rdx\npush r8\npush r9";
+        internal static readonly string PopCallerRegisters = "pop r9\npop r8\npop rdx\npop rcx";
 
-        public Utils(IReloadedHooks hooks, ILogger logger, IModLoader modLoader, Config modConfig)
+        internal Utils(IReloadedHooks hooks, ILogger logger, IModLoader modLoader, Config modConfig)
         {
             iConfig = modConfig;
             iLogger = logger;
+            _hooks = hooks;
 
             modLoader.GetController<IStartupScanner>().TryGetTarget(out var startupScanner);
             IScanner = startupScanner;
@@ -58,26 +60,21 @@ namespace Unhardcoded_P5R
                 fileExists = hooks.CreateWrapper<FileExists>(optionalOpenFileAdr, out _));
         }
 
-        public void SigScan(string pattern, Action<nint> action) => SigScan(pattern, string.Empty, action);
+        internal void SigScan(string pattern, Action<nint> action) => SigScan(pattern, pattern, action);
 
-        public void SigScan(string pattern, string name, Action<nint> action)
+        internal void SigScan(string pattern, string name, Action<nint> action)
         {
             IScanner.AddMainModuleScan(pattern, (result) =>
             {
                 if (!result.Found)
-                {
-                    if (name == string.Empty)
-                        name = pattern;
-
                     throw new Exception($"Could not find address for {name}");
-                }
 
                 DebugLog($"Found {name} at 0x{baseAddress + result.Offset:X}");
                 action.Invoke((nint)(baseAddress + result.Offset));
             });
         }
 
-        public fileHandleStruct* OpenFile(string fileName, int openMode)
+        internal fileHandleStruct* OpenFile(string fileName, int openMode)
         {
             var newFile = openFile(fileName)->ptrtoStruct;
             var status = fsSync(newFile);
@@ -91,29 +88,29 @@ namespace Unhardcoded_P5R
             return newFile;
         }
 
-        public void Log(object logString)
+        internal void Log(object logString)
         {
             iLogger.WriteLineAsync($"[Unhardcoded P5R] {logString}", Color.DimGray);
         }
 
-        public void Log(object logString, Color color)
+        internal void Log(object logString, Color color)
         {
             iLogger.WriteLineAsync($"[Unhardcoded P5R] {logString}", color);
         }
 
-        public void DebugLog(object logString)
+        internal void DebugLog(object logString)
         {
             if (iConfig.DebugBool)
                 iLogger.WriteLine($"[Unhardcoded P5R DEBUG] {logString}", Color.DimGray);
         }
 
-        public void DebugLog(object logString, Color color)
+        internal void DebugLog(object logString, Color color)
         {
             if (iConfig.DebugBool)
                 iLogger.WriteLine($"[Unhardcoded P5R DEBUG] {logString}", color);
         }
 
-        public nint GetAddressFromGlobalRef(nint instructionAdr, byte length, string name = "")
+        internal nint GetAddressFromGlobalRef(nint instructionAdr, byte length, string name = "")
         {
             int opd = *(int*)(instructionAdr + length - 4);
             nint result = instructionAdr + opd + length;
@@ -127,7 +124,7 @@ namespace Unhardcoded_P5R
         }
 
         [StructLayout(LayoutKind.Explicit)]
-        public unsafe struct fileHandleStruct
+        internal unsafe struct fileHandleStruct
         {
             [FieldOffset(0)] public ulong fileStatus;
             [FieldOffset(8)] public fixed byte filename[128];
@@ -135,12 +132,12 @@ namespace Unhardcoded_P5R
             [FieldOffset(152)] public nint pointerToFile;
         };
 
-        public unsafe struct PtrToFileHandle
+        internal unsafe struct PtrToFileHandle
         {
             public fileHandleStruct* ptrtoStruct;
         };
 
-        public struct AsmHookWrapper
+        internal struct AsmHookWrapper
         {
             public IAsmHook asmHook;
             public IReverseWrapper reverseWrapper;
