@@ -211,7 +211,7 @@ namespace Unhardcoded_P5R
             {
                 _getChatName = hooks.CreateHook<GetChatName>((a1) =>
                 {            
-                    if (_expandedChatIconParamDict.TryGetValue(a1, out var chatIconParams))
+                    if (_expandedChatIconParamDict.TryGetValue(a1, out var chatIconParams) && chatIconParams.Name != null)
                     {
                         return Marshal.StringToHGlobalAnsi(chatIconParams.Name);
                     }
@@ -244,6 +244,8 @@ namespace Unhardcoded_P5R
             {
                 PropertyNameCaseInsensitive = true,
                 IncludeFields = true,
+                AllowTrailingCommas = true,
+                
             };
 
             var iconParams = (List<ChatIconParams>)JsonSerializer.Deserialize(File.ReadAllText(filePath), typeof(List<ChatIconParams>), options);
@@ -257,9 +259,9 @@ namespace Unhardcoded_P5R
         private nint GetChatIconParams(nint paramTable, nint ogOffset)
         {
             short index = (short)((ogOffset - paramTable) / 52);
-            if (_chatIconParamIdDict.TryGetValue(index, out var iconParams))
+            if (_chatIconParamIdDict.TryGetValue(index, out var iconParams) && iconParams.ChatIconPRS != null)
             {
-                fixed (void* p_iconParams = &iconParams.Unk0)
+                fixed (void* p_iconParams = &iconParams.ChatIconPRS.Unk0)
                 {
                     return (nint)p_iconParams;
                 }
@@ -270,9 +272,9 @@ namespace Unhardcoded_P5R
 
         private uint GetChatIconBgColor(nint colorTable, short index)
         {
-            if (_chatIconParamIdDict.TryGetValue(index, out var iconParams))
+            if (_chatIconParamIdDict.TryGetValue(index, out var iconParams) && iconParams.ChatIconColor != null)
             {
-                return iconParams.Color;
+                return iconParams.ChatIconColor.Color;
             }
 
             return *(uint*)(colorTable + (index * 4));
@@ -291,8 +293,18 @@ namespace Unhardcoded_P5R
         }
     }
 
-    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Ansi)]
+    [StructLayout(LayoutKind.Auto, CharSet = CharSet.Ansi)]
     public class ChatIconParams
+    {
+        public short Id;
+        public string Comment;
+        public string Name;
+        public ChatIconPRS ChatIconPRS;
+        public ChatIconColor ChatIconColor;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
+    public class ChatIconPRS
     {
         [FieldOffset(0)]
         public short Unk0;
@@ -322,13 +334,11 @@ namespace Unhardcoded_P5R
         public int Unk4;
         [FieldOffset(48)]
         public int Unk5;
+    }
 
-        [FieldOffset(0x34)]
-        public short Id;
-        [FieldOffset(0x38)]
-        public string Name;
-
-        [FieldOffset(0x40), JsonConverter(typeof(HexStringJsonConverter))]
+    public class ChatIconColor
+    {
+        [JsonConverter(typeof(HexStringJsonConverter))]
         public uint Color;
     }
 }
