@@ -2,8 +2,6 @@
 using Reloaded.Hooks.Definitions.X64;
 using Reloaded.Memory.Sources;
 using Reloaded.Mod.Interfaces;
-using Reloaded.Mod.Interfaces.Internal;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -54,8 +52,6 @@ namespace Unhardcoded_P5R
 
             _chatIconParamIdDict = new();
             _expandedChatIconParamDict = new();
-
-            _modLoader.ModLoading += OnModLoading;
 
             var chatJsonPath = Path.Join(_modLoader.GetDirectoryForModId("p5rpc.unhardcodedp5r"), "UnhardcodedP5R", "ChatIconParams.json");
             ReadChatIconParamFile(chatJsonPath);
@@ -174,6 +170,8 @@ namespace Unhardcoded_P5R
                 });
             });
 
+            /* Name */
+
             // nop id bounds checks
             _utils.SigScan("73 ?? 66 41 3B DE", (result) =>
             {
@@ -208,21 +206,6 @@ namespace Unhardcoded_P5R
                 });
             });
 
-            //utils.SigScan("8B C7 BA 10 00 00 00 C1 E0 05", "chatParamAlloc2", (result) =>
-            //{
-            //    string[] asm =
-            //    {
-            //        $"use64",
-            //        _hooks.Utilities.GetAbsoluteCallMnemonics(_createExpandedChatNameList, out var reverseWrapper),
-            //    };
-            //
-            //    _asmHookWrappers.Add(new AsmHookWrapper
-            //    {
-            //        reverseWrapper = reverseWrapper,
-            //        asmHook = _hooks.CreateAsmHook(asm, result, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.ExecuteFirst).Activate()
-            //    });
-            //});
-
             utils.SigScan("48 63 05 ?? ?? ?? ?? 83 F8 0A 0F 87 ?? ?? ?? ?? 4C 8D 05 ?? ?? ?? ?? 41 8B 94 ?? ?? ?? ?? ?? 49 03 D0 FF E2 48 63 C1 48 8D 0D ?? ?? ?? ?? 48 8D 04",
                     "getChatName", (getChatName) =>
             {
@@ -252,13 +235,7 @@ namespace Unhardcoded_P5R
                     });
         }
 
-        private void OnModLoading(IModV1 mod, IModConfigV1 modConfig)
-        {
-            var chatIconParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "ChatIconParams.json");
-            ReadChatIconParamFile(chatIconParamFilePath);
-        }
-
-        private void ReadChatIconParamFile(string filePath)
+        internal void ReadChatIconParamFile(string filePath)
         {
             if (!File.Exists(filePath))
                 return;
@@ -306,7 +283,7 @@ namespace Unhardcoded_P5R
             foreach (var entry in _chatIconParamIdDict.Values)
             {
                 if (_expandedChatIconParamDict.TryAdd(numOfEntries, entry))
-                    _utils.Log($"Adding ID {numOfEntries}");
+                    _utils.Log($"Adding Chat ID {numOfEntries}");
                 numOfEntries++;
             }
 

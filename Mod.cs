@@ -1,5 +1,6 @@
 ﻿using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
+using Reloaded.Mod.Interfaces.Internal;
 using Unhardcoded_P5R.Configuration;
 using Unhardcoded_P5R.Template;
 
@@ -83,8 +84,21 @@ namespace Unhardcoded_P5R
             if (_configuration.SelCutinHooks)
                 _selCutinHooks = new SelCutinHooks(_utils);
 
+            if (_configuration.ItemIconHooks)
+                _itemIconHooks = new ItemIcons(_hooks, _utils);
+
             if (_configuration.FieldModelNumHooks)
                 _fieldModelNumHooks = new FieldModelNumHooks(_hooks, _utils);
+
+            _modLoader.ModLoading += OnModLoading;
+        }
+
+        private void OnModLoading(IModV1 mod, IModConfigV1 modConfig)
+        {
+            var chatIconParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "ChatIconParams.json");
+
+            if (File.Exists(chatIconParamFilePath))
+                _chatHooks.ReadChatIconParamFile(chatIconParamFilePath);
         }
 
         #region Standard Overrides
