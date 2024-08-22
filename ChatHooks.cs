@@ -297,7 +297,6 @@ namespace Unhardcoded_P5R
     public class ChatIconParams
     {
         public short Id;
-        public string Comment;
         public string Name;
         public ChatIconPRS ChatIconPRS;
         public ChatIconColor ChatIconColor;
