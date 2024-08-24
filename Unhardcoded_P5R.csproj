@@ -38,13 +38,10 @@
     <Content Include="ModConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Update="P5REssentials\**">
+    <None Update="UnhardcodedP5R\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Preview.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="UnhardcodedP5R\Original_ChatIconParams.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -75,15 +72,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <NativeLibs Remove="ConfidantHooks.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <NativeLibs Remove="SelCutinHooks.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <NativeLibs Remove="ItemIcons.cs" />
   </ItemGroup>
 
   <ItemGroup>
