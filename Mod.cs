@@ -80,9 +80,6 @@ namespace Unhardcoded_P5R
             if (_configuration.SelCutinHooks)
                 _selCutinHooks = new SelCutinHooks(_utils);
 
-            if (_configuration.ItemIconHooks)
-                _itemIconHooks = new ItemIcons(_hooks, _utils);
-
             if (_configuration.FieldModelNumHooks)
                 _fieldModelNumHooks = new FieldModelNumHooks(_hooks, _utils);
 
