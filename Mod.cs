@@ -46,7 +46,6 @@ namespace Unhardcoded_P5R
         private ChatHooks _chatHooks = null!;
         private LmapHooks _lmapHooks = null!;
         private ShopHooks _shopHooks = null!;
-        private ConfidantHooks _confidantHooks = null!;
         private SelCutinHooks _selCutinHooks = null!;
         private FieldModelNumHooks _fieldModelNumHooks = null!;
         public Mod(ModContext context)
@@ -74,9 +73,6 @@ namespace Unhardcoded_P5R
 
             if (_configuration.LmapHooks)
                 _lmapHooks = new LmapHooks(_hooks, _utils);
-
-            if (_configuration.ConfidantHooks)
-                _confidantHooks = new ConfidantHooks(_hooks, _utils);
 
             if (_configuration.ShopHooks)
                 _shopHooks = new ShopHooks(_hooks, _utils);
