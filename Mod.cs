@@ -91,14 +91,21 @@ namespace Unhardcoded_P5R
                 _fieldModelNumHooks = new FieldModelNumHooks(_hooks, _utils);
 
             _modLoader.ModLoading += OnModLoading;
+            _modLoader.OnModLoaderInitialized += OnModLoaderInitialized;
         }
 
         private void OnModLoading(IModV1 mod, IModConfigV1 modConfig)
         {
             var chatIconParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "ChatIconParams.json");
+            _chatHooks.ReadChatIconParamFile(chatIconParamFilePath);
 
-            if (File.Exists(chatIconParamFilePath))
-                _chatHooks.ReadChatIconParamFile(chatIconParamFilePath);
+            var lmapSpriteParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSpriteParams.json");
+            _lmapHooks.ReadLmapSpriteParamFile(lmapSpriteParamFilePath);
+        }
+
+        private void OnModLoaderInitialized()
+        {
+            _lmapHooks.WriteNewLmapParamTable();
         }
 
         #region Standard Overrides

@@ -3,11 +3,34 @@ using Reloaded.Memory.Sources;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using static Unhardcoded_P5R.Utils;
+using static Reloaded.Hooks.Definitions.X64.FunctionAttribute;
+using Reloaded.Hooks.Definitions.X64;
+using System.Numerics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Diagnostics;
 
 namespace Unhardcoded_P5R
 {
     internal unsafe class LmapHooks
     {
+        [Function(new[] { Register.rdi }, Register.rcx, true, new[] {Register.rdi, Register.rdx, Register.r8})]
+        private delegate nint d_CreateImagePath(int index);
+        private d_CreateImagePath _createImagePath;
+
+        [Function(new[] { Register.rdi }, Register.rcx, true, new[] { Register.rdi, Register.rdx, Register.r8})]
+        private delegate nint d_CreateGrayImagePath(int index);
+        private d_CreateGrayImagePath _createGrayImagePath;
+
+        [Function(new[] { Register.r8, Register.rdx, Register.r9 }, Register.r10, true)]
+        private delegate int d_FindCmmField1(int fldMajor, int fldMinor, P5RField** cmmTable);
+        private d_FindCmmField1 _findCmmField1;
+
+        [Function(new[] { Register.r9, Register.rdx, Register.r8 }, Register.r10, true)]
+        private delegate int d_FindCmmField2(int fldMajor, int fldMinor, P5RField** cmmTable);
+        private d_FindCmmField2 _findCmmField2;
+
         private delegate void LoadLmapImage(long a1, int a2);
         private delegate ulong LoadLmapFtds(long a1);
         private delegate char FUN_1412f1d70(long a1, int a2);
@@ -29,11 +52,27 @@ namespace Unhardcoded_P5R
         private IAsmHook _cmmLmapTableEnd;
         private IAsmHook _mapImageStringPtr;
 
+        private IReloadedHooks _hooks;
+        private Utils _utils;
+        private byte[] file;
+
+        private readonly List<AsmHookWrapper> asmHookWrappers = new();
+        private readonly Dictionary<int, LmapDestination> _lmapDestinationDict = new();
+
+        nint lmapParamTable;
         internal LmapHooks(IReloadedHooks hooks, Utils utils)
         {
             utils.DebugLog("Loading Lmap Module", Color.PaleGreen);
 
-            nint lmapImageLoadAdr = 0;
+            _hooks = hooks;
+            _utils = utils;
+
+            _createImagePath = CreateImagePath;
+            _createGrayImagePath = CreateGrayImagePath;
+
+            _findCmmField1 = FindCmmField;
+            _findCmmField2 = FindCmmField;
+
             nint loadLmapFtdsAdr = 0;
 
             nint FUN_1412f1d70adr = 0;
@@ -41,13 +80,7 @@ namespace Unhardcoded_P5R
             nint getMapImageAdr = 0;
             nint FUN_14eec6d60adr = 0;
 
-            nint lmapParamTable = 0;
-            nint lmapImagePtr = 0;
-            nint lmapImageGrayPtr = 0;
-
             nint mapImagePtr = 0;
-
-            nint DAT_142a0b858 = 0;
 
             List<nint> lmapCmmIdPtrInstructions = new();
 
@@ -96,19 +129,9 @@ namespace Unhardcoded_P5R
                 "4C 8D 25 ?? ?? ?? ?? 41 8B F1 41 8B E8",
             };
 
-            utils.SigScan("00 00 c0 c1 00 80 14 43 00 00 76 c2 00 00 01 c3 00 00 58 42 00 80 11 43 00 00 d8 41 22 00 09 03", "lmapParamTable", (result) => //Lmap SPD Parameters (data scan)
+            utils.SigScan("4C 8D 15 ?? ?? ?? ?? F3 43 0F 10 5C", "lmapParamTable", (result) => //Lmap SPD Parameters (data scan)
             {
-                lmapParamTable = result;
-            });
-
-            utils.SigScan("4A 8B 8C ?? ?? ?? ?? ?? A8 01", "lmapImagePtr", (result) => //Lmap Image String Pointer
-            {
-                lmapImagePtr = result;
-            });
-
-            utils.SigScan("4A 8B 8C ?? ?? ?? ?? ?? 83 A3 ?? ?? ?? ?? FC", "lmapImageGrayPtr", (result) => //Lmap Gray Image String Pointer
-            {
-                lmapImageGrayPtr = result;
+                lmapParamTable = _utils.GetAddressFromGlobalRef(result, 7);
             });
 
             utils.SigScan("48 89 5C 24 ?? 57 48 83 EC 20 48 8B D9 48 63 FA B9 F0 03 00 00", "FUN_1412f1d70adr", (result) =>
@@ -162,11 +185,10 @@ namespace Unhardcoded_P5R
                 });
             }
 
-            utils.SigScan("FF C9 BA FF FF FF FF 83 F9 0D", "lmapIdtoPointerIndexAdr", (lmapIdtoPointerIndexAdr) =>
+            utils.SigScan("FF C9 BA FF FF FF FF 83 F9 0D", "lmapIdtoPointerIndexAdr", (lmapIdtoPointerIndexAdr) => // 0x141342c50
             {
                 _lmapIdtoFieldListPointerIndex = hooks.CreateHook<LmapIdtoFieldListPointerIndex>((a1) =>
                 {
-                    //utils.DebugLog($"Called Function: LmapIdtoFieldListPointerIndex at {lmapIdtoPointerIndexAdr:X8}", Color.LightSlateGray);
                     return a1;
                 }, lmapIdtoPointerIndexAdr).Activate();
             });
@@ -179,26 +201,6 @@ namespace Unhardcoded_P5R
             utils.SigScan("48 83 EC 28 4C 8B 05 ?? ?? ?? ?? 4D 85 C0 0F 84 ?? ?? ?? ??", "FUN_14eec6d60adr", (result) =>
             {
                 FUN_14eec6d60adr = result;
-            });
-
-            utils.SigScan("40 53 55 56 57 41 54 41 55 41 56 48 83 EC 30", "loadLmapFtdsAdr", (result) => //Hooks Lmap ftd load function to load new files
-            {
-                loadLmapFtdsAdr = result;
-
-                bool hooksDone = false;
-
-                _loadLmapFtds = hooks.CreateHook<LoadLmapFtds>((a1) =>
-                {
-                    utils.DebugLog($"Called Function: LoadLmapFtds at {loadLmapFtdsAdr:X8}", Color.LightSlateGray);
-                    if (!hooksDone)
-                    {
-                        LmapParamHooks(hooks, utils, lmapParamTable);
-                        LmapCmmHooks(hooks, utils, lmapCmmIdPtrInstructions, lmapCmmLimitInstructions, lmapCmmListEndPtrInstructions);
-                        LmapCmmFieldHooks(hooks, utils, lmapFieldPtrInstructions, lmapFieldPtrEndInstructions);
-                    }
-                    hooksDone = true;
-                    return _loadLmapFtds.OriginalFunction(a1);
-                }, loadLmapFtdsAdr).Activate();
             });
 
             utils.SigScan("48 83 EC 28 8B 81 ?? ?? ?? ?? 41 BB FF FF FF FF", "getMapImageAdr", (result) =>
@@ -300,102 +302,187 @@ namespace Unhardcoded_P5R
                 }, getMapImageAdr).Activate();
             });
 
-            utils.SigScan("8B 15 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 89 B3 ?? ?? ?? ?? 8B D7", "ref_DAT_142a0b858", (result) =>
+            utils.SigScan("4A 8B 8C ?? ?? ?? ?? ?? A8 01", "lmapImageLoad", (result) => // Lmap Image Function 0x14134137e
             {
-                DAT_142a0b858 = utils.GetAddressFromGlobalRef(result, 6, "DAT_142a0b858");
+                string[] asm =
+                {
+                    "use64",
+                    hooks.Utilities.GetAbsoluteCallMnemonics(_createImagePath, out var wrapper),
+                };
+
+                asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    asmHook = hooks.CreateAsmHook(asm, result, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate(),
+                    reverseWrapper = wrapper
+                });
             });
 
-            utils.SigScan("48 89 5C 24 ?? 57 48 83 EC 20 48 63 FA 48 8B D9 39 B9 ?? ?? ?? ??", "lmapImageLoadAdr", (result) => //Lmap Image Function
+            utils.SigScan("4A 8B 8C ?? ?? ?? ?? ?? 83 A3 ?? ?? ?? ?? FC", "lmapGrayImageLoad", (result) => // Lmap Gray Image Function 0x14134137e
             {
-                lmapImageLoadAdr = result;
-
-                var _FUN_1412f1d70 = hooks.CreateWrapper<FUN_1412f1d70>(FUN_1412f1d70adr, out IntPtr wrapperAddress);
-                var _FUN_1401f9f10 = hooks.CreateWrapper<FUN_1401f9f10>(FUN_1401f9f10adr, out wrapperAddress);
-
-                _loadLmapImage = hooks.CreateHook<LoadLmapImage>((a1, a2) =>
+                string[] asm =
                 {
-                    utils.DebugLog($"Called Function: LoadLmapImage at {lmapImageLoadAdr:X8}", Color.LightSlateGray);
+                    "use64",
+                    hooks.Utilities.GetAbsoluteCallMnemonics(_createGrayImagePath, out var wrapper),
+                };
 
-                    bool bVar1;
-                    bool bVar2;
-                    char cVar3;
-                    ulong uVar4;
-                    ushort* puVar5;
-                    long lVar6;
-                    string imageString = $"image/pict{a2 + 40:D2}.dds";
+                asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    asmHook = hooks.CreateAsmHook(asm, result, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate(),
+                    reverseWrapper = wrapper
+                });
+            });
 
-                    if (*(uint*)(a1 + 0x18a4) != a2)
-                    {
-                        lVar6 = 0;
-                        if (*(long*)(a1 + 0x1770) != 0)
-                        {
-                            _FUN_1401f9f10(*(long*)(a1 + 0x1770), DAT_142a0b858); //1.02
-                            *(ulong*)(a1 + 0x1770) = 0;
-                        }
-                        bVar2 = true;
-                        cVar3 = _FUN_1412f1d70(a1, a2);
-                        if (cVar3 != '\0')
-                        {
-                            bool gotofalse = false;
-                        LAB_1412ee816:
-                            if ((*(uint*)(a1 + 0x1c) >> 0xc & 1) == 0 && gotofalse == false)
-                            {
-                                puVar5 = (ushort*)(a1 + 0x30);
-                                do
-                                {
+            utils.SigScan("49 8B 01 48 85 C0 74 ?? 0F 1F 80 00 00 00 00 0F B7 08 66 83 F9 FF 74 ?? 66 41 3B C8 75 ?? 66 39 50 ?? 74 ?? 48 83 C0 04 75 ?? 41 FF C2 48 8D 05 ?? ?? ?? ?? 49 83 C1 08 4C 3B C8 7C ?? 44 8B D7", "FindCmmField1", (result) => // Get Lmap Cmm Ids 0x1411e5681
+            {
+                string[] asm =
+                {
+                    "use64",
+                    hooks.Utilities.GetAbsoluteCallMnemonics(_findCmmField1, out var wrapper),
+                    hooks.Utilities.GetAbsoluteJumpMnemonics((nint)0x1411e56c1, true)
+                };
 
-                                    if (*puVar5 == a2)
-                                    {
-                                        gotofalse = true;
-                                        goto LAB_1412ee816;
-                                    }
-                                    lVar6 = lVar6 + 1;
-                                    puVar5 = puVar5 + 1;
-                                } while (lVar6 < 0xc);
-                            }
-                            else
-                            {
-                                bVar2 = false;
-                            }
-                        }
-                        bVar1 = false;
-                        lVar6 = a2;
-                        if ((*(uint*)(a1 + 0x1c) >> 0xc & 1) == 0)
-                        {
-                            bVar1 = bVar2;
-                        }
-                        if (bVar1)
-                        {
-                            imageString = $"image/pict{a2 + 40:D2}_gray.dds";
-                        }
-                        *(uint*)(a1 + 0x1910) = *(uint*)(a1 + 0x1910) & 0xfffffffc;
-                        if (lVar6 != 0)
-                        {
-                            uVar4 = (ulong)utils.loadDDS(imageString);
-                            *(ulong*)(a1 + 0x1770) = uVar4;
-                            *(uint*)(a1 + 0x1910) = *(uint*)(a1 + 0x1910) | 1;
-                        }
-                        *(uint*)(a1 + 0x18a4) = (uint)a2;
-                    }
-                    return;
-                }, lmapImageLoadAdr).Activate();
+                asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    asmHook = hooks.CreateAsmHook(asm, result, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate(),
+                    reverseWrapper = wrapper
+                });
+            });
+
+            utils.SigScan("49 8B 00 48 85 C0 74 ?? 0F 1F 84 ?? 00 00 00 00 0F B7 08 66 83 F9 FF 74 ?? 66 41 3B C9 75 ?? 66 39 50 ?? 74 ?? 48 83 C0 04 75 ?? 41 FF C2 49 83 C0 08 4D 3B C4 7C ?? 45 33 D2 45 3B FA", "FindCmmField2", (result) => // Get Lmap Cmm Ids 0x1411e59b0
+            {
+                string[] asm =
+                {
+                    "use64",
+                    hooks.Utilities.GetAbsoluteCallMnemonics(_findCmmField2, out var wrapper),
+                    hooks.Utilities.GetAbsoluteJumpMnemonics((nint)0x1411e59ea, true)
+                };
+
+                asmHookWrappers.Add(new AsmHookWrapper
+                {
+                    asmHook = hooks.CreateAsmHook(asm, result, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate(),
+                    reverseWrapper = wrapper
+                });
             });
         }
-
-        private void LmapParamHooks(IReloadedHooks hooks, Utils utils, long lmapParamTable)
+        nint CreateImagePath(int index)
         {
-            string newLmapFile = @"field/panel/lmap/lmapParams.dat";
-            var newFile = utils.OpenFile(newLmapFile, 0);
+            return Marshal.StringToHGlobalAnsi($"image/pict{index + 40:D2}.dds");
+        }
 
-            var fileBuffer = newFile->bufferSize;
+        nint CreateGrayImagePath(int index)
+        {
+            return Marshal.StringToHGlobalAnsi($"image/pict{index + 40:D2}_gray.dds");
+        }
 
-            var fileAddress = newFile->pointerToFile;
+        internal void ReadLmapSpriteParamFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return;
 
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                IncludeFields = true,
+                AllowTrailingCommas = true,
+            };
+
+            var lmapParams = (List<LmapDestination>)JsonSerializer.Deserialize(File.ReadAllText(filePath), typeof(List<LmapDestination>), options);
+
+            foreach (var param in lmapParams)
+            {
+                if (param.Id > 35 || param.Id < 0)
+                    throw new ArgumentOutOfRangeException(nameof(param.Id));
+
+                if (param.SpriteParams != null)
+                    _utils.Log($"Registering Lmap params for Id {param.Id}");
+                if (param.LmapConfidantFields != null)
+                    _utils.Log($"Registering Lmap confidant fields for Id {param.Id}");
+
+                _lmapDestinationDict[param.Id] = param;
+            }
+        }
+        internal void WriteNewLmapParamTable()
+        {
             var memory = Memory.Instance;
 
-            memory.SafeReadRaw((nuint)fileAddress, out byte[] paramBytes, (int)fileBuffer);
+            foreach (var (key, value) in _lmapDestinationDict)
+            {
+                if (value.SpriteParams != null)
+                {
+                    var structSize = Marshal.SizeOf(typeof(LmapSpriteParams));
+                    var tblEntryAddress = (nuint)(lmapParamTable + (structSize * key));
+                    memory.ChangePermission(tblEntryAddress, structSize, Reloaded.Memory.Kernel32.Kernel32.MEM_PROTECTION.PAGE_READWRITE);
+                    Marshal.StructureToPtr(value.SpriteParams, (nint)tblEntryAddress, false);
+                }
+            }
+        }
 
-            memory.SafeWriteRaw((nuint)lmapParamTable - 328, paramBytes);
+        internal int FindCmmField(int fldMajor, int fldMinor, P5RField** cmmTable)
+        {
+            for (int i = 0; i < 36; i++)
+            {
+                if (_lmapDestinationDict.TryGetValue(i, out var value) && value.LmapConfidantFields != null)
+                {
+                    var fields = value.LmapConfidantFields;
+
+                    foreach (var field in fields)
+                    {
+                        if (fldMajor == field.FieldMajorId && fldMinor == field.FieldMinorId)
+                        {
+                            return i;
+                        }
+                    }
+                }
+                else if (i < 27)
+                {
+                    var index = GetLmapDestinationTableIndex(i);
+                    int j = 0;
+                    while (true)
+                    {
+                        if (cmmTable[index] == null)
+                        {
+                            j++;
+                            break;
+                        }
+
+                        var field = cmmTable[index][j];
+                
+                        if (field.FieldMajorId == -1)
+                            break;
+                        else if (field.FieldMajorId == fldMajor && fldMinor == field.FieldMinorId)
+                            return i;
+                
+                        j++;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        int GetLmapDestinationTableIndex(int param_1)
+        {
+            switch (param_1)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                    return 3;
+                case 3:
+                    return 2;
+                case 4:
+                    return 4;
+                case 5:
+                    return 5;
+                case 6:
+                    return 6;
+                case 7:
+                    return 0xc;
+                case 0xe:
+                    return 0x18;
+                default:
+                    return param_1;
+            }
         }
 
         private void LmapCmmHooks(IReloadedHooks hooks, Utils utils, List<nint> lmapCmmPtrInstructions, List<nint> lmapCmmLimitInstructions, List<nint> lmapCmmListEndPtrInstructions)
@@ -419,7 +506,7 @@ namespace Unhardcoded_P5R
                 _cmmLmapTablePtr = hooks.CreateAsmHook(CmmListPointerAsm, lmapCmmPtrInstructions[i], Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             }
 
-            for (int i = 0; i < lmapCmmLimitInstructions.Count; i++) //update corptbl id limit
+            for (int i = 0; i < lmapCmmLimitInstructions.Count; i++) // update corptbl id limit
             {
                 if (i == 0)
                     memory.SafeWrite(lmapCmmLimitInstructions[i] + 3, (byte)(fileBuffer / 8));
@@ -433,49 +520,88 @@ namespace Unhardcoded_P5R
                 _cmmLmapTableEnd = hooks.CreateAsmHook(CmmListEndAsm, lmapCmmListEndPtrInstructions[i], Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             }
         }
+    }
 
-        private void LmapCmmFieldHooks(IReloadedHooks hooks, Utils utils, List<nint> lmapFieldPtrInstructions, List<nint> lmapFieldEndPtrInstructions)
+    public class LmapDestination
+    {
+        /// <summary>
+        /// Index of the param entry
+        /// </summary>
+        public int Id;
+
+        /// <summary>
+        /// Sprite parameters for sprites that show up on the railmap
+        /// </summary>
+        public LmapSpriteParams SpriteParams;
+
+        /// <summary>
+        /// Fields that will show a card if a confidant is available there.
+        /// </summary>
+        public P5RField[]? LmapConfidantFields;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 0xb4, Pack = 1)]
+    public unsafe class LmapSpriteParams
+    {
+        [FieldOffset(0)]
+        public Vector2 PlayerIconPos;
+        [FieldOffset(8)]
+        public float[] unk1;
+        [FieldOffset(0x28)]
+        public Vector2 MainIconPoint1;
+        [FieldOffset(0x30)]
+        public Vector2 MainIconPoint2;
+        [FieldOffset(0x38)]
+        public float[] unk2;
+        [FieldOffset(0x48)]
+        public Vector2 Kanji1;
+        [FieldOffset(0x50)]
+        public Vector2 KanjiPoint2;
+        [FieldOffset(0x58)]
+        public Vector2 LabelPoint1;
+        [FieldOffset(0x60)]
+        public Vector2 LabelPoint2;
+        [FieldOffset(0x68)]
+        public Vector2 OuterTopLeftLabelBox;
+        [FieldOffset(0x70)]
+        public Vector2 OuterTopRightLabelBox;
+        [FieldOffset(0x78)]
+        public Vector2 OuterBottomLeftLabelBox;
+        [FieldOffset(0x80)]
+        public Vector2 OuterBottomRightLabelBox;
+        [FieldOffset(0x88)]
+        public Vector2 InnerTopLeftLabelBox;
+        [FieldOffset(0x90)]
+        public Vector2 InnerTopRightLabelBox;
+        [FieldOffset(0x98)]
+        public Vector2 InnerBottomLeftLabelBox;
+        [FieldOffset(0xa0)]
+        public Vector2 InnerBottomRightLabelBox;
+        [FieldOffset(0xa8)]
+        public byte MainSpdId;
+        [FieldOffset(0xa9)]
+        public byte MainSpd2Unused;
+        [FieldOffset(0xaa)]
+        public byte KanjiSpdId;
+        [FieldOffset(0xab)]
+        public byte LableSpdId;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Size = 4)]
+    public struct P5RField
+    {
+        public short FieldMajorId;
+        public short FieldMinorId;
+
+        public override string ToString()
         {
-            string[] fieldListPtrRegisters = { "r9", "r9", "r13", "r13", "r12", "r12" };
-            string[] fieldListEndAdrRegisters = { "rax", "rax", "r15", "r15", "r12", "r12" };
-
-            string newLmapFile = @"field/panel/lmap/lmapCmmFields.dat";
-            var newFile = utils.OpenFile(newLmapFile, 0);
-
-            var fileBuffer = newFile->bufferSize;
-
-            var fileAddress = newFile->pointerToFile;
-
-            ulong[] fieldIdListOffsets = new ulong[36];
-            int fileOffset = 0;
-
-            for (int i = 0; i < fieldIdListOffsets.Length; i++)
-            {
-                if (i == 0)
-                    fieldIdListOffsets[i] = 0;
-                else
-                    fieldIdListOffsets[i] = (ulong)(fileAddress + (fileOffset * 4));
-
-                while (true)
-                {
-                    int* fieldId = (int*)(fileAddress + (fileOffset * 4));
-                    fileOffset++;
-                    if (*fieldId == -1)
-                        break;
-                }
-            }
-
-            fixed (ulong* fieldIdListOffsetsPtr = fieldIdListOffsets)
-            {
-                utils.DebugLog($"fieldIdListOffsetsPtr: {(long)fieldIdListOffsetsPtr:X8}", Color.PaleGreen);
-                for (int i = 0; i < lmapFieldPtrInstructions.Count; i++)
-                {
-                    string[] lmapFieldPointerListAsm = { $"use64", $"mov {fieldListPtrRegisters[i]}, 0x{(long)fieldIdListOffsetsPtr:X8}" };
-                    string[] lmapFieldEndListAsm = { $"use64", $"mov {fieldListEndAdrRegisters[i]}, 0x{(long)(fieldIdListOffsetsPtr + 36):X8}" };
-                    _cmmLmapFieldPtr = hooks.CreateAsmHook(lmapFieldPointerListAsm, lmapFieldPtrInstructions[i], Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                    _cmmLmapFieldEnd = hooks.CreateAsmHook(lmapFieldEndListAsm, lmapFieldEndPtrInstructions[i], Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                };
-            }
+            return $"f{FieldMajorId:D3}_{FieldMinorId:D3}";
         }
+    }
+
+    public class LmapSilhouetteArtFields
+    {
+        string LmapSilhouetteArtPath;
+        P5RField[] Fields;
     }
 }
