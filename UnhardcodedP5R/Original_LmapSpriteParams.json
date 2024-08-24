@@ -1,0 +1,3418 @@
+[
+  {
+    "Id": 0,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 1,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -162,
+        "Y": -123
+      },
+      "unk1": [
+        99,
+        12,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 12,
+        "Y": -52.5
+      },
+      "MainIconPoint2": {
+        "X": 199.5,
+        "Y": 255
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 9
+      },
+      "KanjiPoint2": {
+        "X": 78,
+        "Y": 52.5
+      },
+      "LabelPoint1": {
+        "X": 12,
+        "Y": 55.5
+      },
+      "LabelPoint2": {
+        "X": 78,
+        "Y": 22.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -142.5,
+        "Y": -27
+      },
+      "OuterTopRightLabelBox": {
+        "X": 157.5,
+        "Y": -75
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -132,
+        "Y": 85.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 154.5,
+        "Y": 63
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -132,
+        "Y": -24
+      },
+      "InnerTopRightLabelBox": {
+        "X": 148.5,
+        "Y": -61.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -129,
+        "Y": 54
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 145.5,
+        "Y": 27
+      },
+      "MainSpdId": 34,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 9,
+      "LableSpdId": 3
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": 1
+      },
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": 2
+      },
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": 3
+      },
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": 4
+      },
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": 5
+      },
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": 6
+      },
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": 7
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 2
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 5
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 6
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 8
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 9
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 18
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 19
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 20
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -199.5,
+        "Y": -123
+      },
+      "unk1": [
+        115.5,
+        10.5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -52.5
+      },
+      "MainIconPoint2": {
+        "X": 195,
+        "Y": 228
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": -1.5
+      },
+      "KanjiPoint2": {
+        "X": 118.5,
+        "Y": 52.5
+      },
+      "LabelPoint1": {
+        "X": 15,
+        "Y": 58.5
+      },
+      "LabelPoint2": {
+        "X": 108,
+        "Y": 18
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -187.5,
+        "Y": -46.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 144,
+        "Y": -58.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -142.5,
+        "Y": 102
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 166.5,
+        "Y": 54
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -169.5,
+        "Y": -40.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 133.5,
+        "Y": -52.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -139.5,
+        "Y": 57
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 153,
+        "Y": 28.5
+      },
+      "MainSpdId": 35,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 10,
+      "LableSpdId": 4
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 3,
+        "FieldMinorId": 2
+      },
+      {
+        "FieldMajorId": 9,
+        "FieldMinorId": 1
+      },
+      {
+        "FieldMajorId": 9,
+        "FieldMinorId": 2
+      },
+      {
+        "FieldMajorId": 9,
+        "FieldMinorId": 3
+      },
+      {
+        "FieldMajorId": 9,
+        "FieldMinorId": 4
+      },
+      {
+        "FieldMajorId": 9,
+        "FieldMinorId": 5
+      },
+      {
+        "FieldMajorId": 11,
+        "FieldMinorId": 6
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 1
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -213,
+        "Y": -129
+      },
+      "unk1": [
+        109.5,
+        16.5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -51
+      },
+      "MainIconPoint2": {
+        "X": 196.5,
+        "Y": 220.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": -4.5,
+        "Y": 4.5
+      },
+      "KanjiPoint2": {
+        "X": 115.5,
+        "Y": 52.5
+      },
+      "LabelPoint1": {
+        "X": 9,
+        "Y": 58.5
+      },
+      "LabelPoint2": {
+        "X": 118.5,
+        "Y": 22.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -156,
+        "Y": -57
+      },
+      "OuterTopRightLabelBox": {
+        "X": 139.5,
+        "Y": -48
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -135,
+        "Y": 84
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 150,
+        "Y": 70.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -144,
+        "Y": -51
+      },
+      "InnerTopRightLabelBox": {
+        "X": 130.5,
+        "Y": -39
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -126,
+        "Y": 45
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 142.5,
+        "Y": 33
+      },
+      "MainSpdId": 36,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 11,
+      "LableSpdId": 5
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 1
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 2
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 3
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 4
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 5
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 6
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 7
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 8
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 9
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 10
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 11
+      },
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": 12
+      },
+      {
+        "FieldMajorId": 11,
+        "FieldMinorId": 4
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -180,
+        "Y": -118.5
+      },
+      "unk1": [
+        87,
+        19.5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -49.5
+      },
+      "MainIconPoint2": {
+        "X": 196.5,
+        "Y": 265.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 4.5
+      },
+      "KanjiPoint2": {
+        "X": 78,
+        "Y": 52.5
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 57
+      },
+      "LabelPoint2": {
+        "X": 78,
+        "Y": 22.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -132,
+        "Y": -39
+      },
+      "OuterTopRightLabelBox": {
+        "X": 150,
+        "Y": -61.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -136.5,
+        "Y": 69
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 126,
+        "Y": 72
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -120,
+        "Y": -33
+      },
+      "InnerTopRightLabelBox": {
+        "X": 139.5,
+        "Y": -52.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -127.5,
+        "Y": 42
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 118.5,
+        "Y": 37.5
+      },
+      "MainSpdId": 38,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 13,
+      "LableSpdId": 7
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 6,
+        "FieldMinorId": 1
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 12
+      }
+    ]
+  },
+  {
+    "Id": 5,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -178.5,
+        "Y": -154.5
+      },
+      "unk1": [
+        114,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -82.5
+      },
+      "MainIconPoint2": {
+        "X": 210,
+        "Y": 259.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 4.5,
+        "Y": -31.5
+      },
+      "KanjiPoint2": {
+        "X": 114,
+        "Y": 52.5
+      },
+      "LabelPoint1": {
+        "X": 3,
+        "Y": 36
+      },
+      "LabelPoint2": {
+        "X": 108,
+        "Y": 22.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -156,
+        "Y": -57
+      },
+      "OuterTopRightLabelBox": {
+        "X": 168,
+        "Y": -111
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -157.5,
+        "Y": 63
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 147,
+        "Y": 45
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -150,
+        "Y": -52.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 156,
+        "Y": -100.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -144,
+        "Y": 31.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 139.5,
+        "Y": 7.5
+      },
+      "MainSpdId": 39,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 14,
+      "LableSpdId": 8
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 7,
+        "FieldMinorId": 1
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 11
+      }
+    ]
+  },
+  {
+    "Id": 6,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        186,
+        40.5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 141,
+        "Y": 16.5
+      },
+      "MainIconPoint2": {
+        "X": 99,
+        "Y": 130.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 3,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 64.5,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 6,
+        "Y": 45
+      },
+      "LabelPoint2": {
+        "X": 64.5,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -88.5,
+        "Y": -37.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 85.5,
+        "Y": -36
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -81,
+        "Y": 66
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 84,
+        "Y": 54
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -79.5,
+        "Y": -31.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 76.5,
+        "Y": -31.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -76.5,
+        "Y": 36
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 76.5,
+        "Y": 22.5
+      },
+      "MainSpdId": 37,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 12,
+      "LableSpdId": 6
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 4
+      }
+    ]
+  },
+  {
+    "Id": 7,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -178,
+        "Y": -149
+      },
+      "unk1": [
+        133,
+        -43,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -52
+      },
+      "MainIconPoint2": {
+        "X": 229,
+        "Y": 259
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": -7,
+        "Y": 1
+      },
+      "KanjiPoint2": {
+        "X": 114,
+        "Y": 52
+      },
+      "LabelPoint1": {
+        "X": 5,
+        "Y": 63
+      },
+      "LabelPoint2": {
+        "X": 108,
+        "Y": 24
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -181,
+        "Y": -61
+      },
+      "OuterTopRightLabelBox": {
+        "X": 157,
+        "Y": -58
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -151,
+        "Y": 94
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 156,
+        "Y": 72
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -168,
+        "Y": -51
+      },
+      "InnerTopRightLabelBox": {
+        "X": 144,
+        "Y": -49
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -152,
+        "Y": 47
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 152,
+        "Y": 35
+      },
+      "MainSpdId": 200,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 201,
+      "LableSpdId": 202
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 5,
+        "FieldMinorId": 1
+      }
+    ]
+  },
+  {
+    "Id": 8,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 9,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 10,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 11,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 105,
+        "Y": 33
+      },
+      "MainIconPoint2": {
+        "X": 61.5,
+        "Y": 141
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 7.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 93,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 16.5,
+        "Y": 45
+      },
+      "LabelPoint2": {
+        "X": 93,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -85.5,
+        "Y": -33
+      },
+      "OuterTopRightLabelBox": {
+        "X": 81,
+        "Y": -42
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -78,
+        "Y": 66
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 93,
+        "Y": 57
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -79.5,
+        "Y": -21
+      },
+      "InnerTopRightLabelBox": {
+        "X": 72,
+        "Y": -37.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -76.5,
+        "Y": 40.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 82.5,
+        "Y": 24
+      },
+      "MainSpdId": 40,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 15,
+      "LableSpdId": 92
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 12,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -36
+      },
+      "MainIconPoint2": {
+        "X": 85.5,
+        "Y": 141
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 3,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 64.5,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 3,
+        "Y": 43.5
+      },
+      "LabelPoint2": {
+        "X": 64.5,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -88.5,
+        "Y": -43.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 90,
+        "Y": -31.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -84,
+        "Y": 58.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 85.5,
+        "Y": 61.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -78,
+        "Y": -33
+      },
+      "InnerTopRightLabelBox": {
+        "X": 78,
+        "Y": -27
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -78,
+        "Y": 25.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 81,
+        "Y": 33
+      },
+      "MainSpdId": 41,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 16,
+      "LableSpdId": 98
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 13,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 14,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 30,
+        "Y": -116
+      },
+      "unk1": [
+        76.5,
+        12,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -37.5
+      },
+      "MainIconPoint2": {
+        "X": 102,
+        "Y": 135
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 3,
+        "Y": 3
+      },
+      "KanjiPoint2": {
+        "X": 64.5,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 4.5,
+        "Y": 43.5
+      },
+      "LabelPoint2": {
+        "X": 64.5,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -90,
+        "Y": -25.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 88.5,
+        "Y": -43.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -78,
+        "Y": 64.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 88.5,
+        "Y": 54
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -81,
+        "Y": -16.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 73.5,
+        "Y": -36
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -72,
+        "Y": 34.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 81,
+        "Y": 24
+      },
+      "MainSpdId": 42,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 17,
+      "LableSpdId": 90
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 20,
+        "FieldMinorId": 11
+      }
+    ]
+  },
+  {
+    "Id": 15,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -36
+      },
+      "MainIconPoint2": {
+        "X": 111,
+        "Y": 136.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 64.5,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 4.5,
+        "Y": 42
+      },
+      "LabelPoint2": {
+        "X": 64.5,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -87,
+        "Y": -31.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 87,
+        "Y": -42
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -88.5,
+        "Y": 61.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 87,
+        "Y": 54
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -79.5,
+        "Y": -25.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 79.5,
+        "Y": -33
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -76.5,
+        "Y": 31.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 79.5,
+        "Y": 27
+      },
+      "MainSpdId": 44,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 19,
+      "LableSpdId": 93
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 16,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -150,
+        "Y": -120
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -36
+      },
+      "MainIconPoint2": {
+        "X": 99,
+        "Y": 127.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 64.5,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 6,
+        "Y": 46.5
+      },
+      "LabelPoint2": {
+        "X": 64.5,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -99,
+        "Y": -39
+      },
+      "OuterTopRightLabelBox": {
+        "X": 96,
+        "Y": -33
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -87,
+        "Y": 69
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 97.5,
+        "Y": 57
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -93,
+        "Y": -27
+      },
+      "InnerTopRightLabelBox": {
+        "X": 88.5,
+        "Y": -30
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -84,
+        "Y": 36
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 90,
+        "Y": 30
+      },
+      "MainSpdId": 51,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 26,
+      "LableSpdId": 97
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 17,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -31.5
+      },
+      "MainIconPoint2": {
+        "X": 115.5,
+        "Y": 129
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": 3
+      },
+      "KanjiPoint2": {
+        "X": 105,
+        "Y": 37.5
+      },
+      "LabelPoint1": {
+        "X": 4.5,
+        "Y": 48
+      },
+      "LabelPoint2": {
+        "X": 105,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -121.5,
+        "Y": -34.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 117,
+        "Y": -43.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -120,
+        "Y": 67.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 117,
+        "Y": 61.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -111,
+        "Y": -27
+      },
+      "InnerTopRightLabelBox": {
+        "X": 106.5,
+        "Y": -36
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -105,
+        "Y": 37.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 109.5,
+        "Y": 27
+      },
+      "MainSpdId": 43,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 18,
+      "LableSpdId": 108
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 18,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -39
+      },
+      "MainIconPoint2": {
+        "X": 120,
+        "Y": 135
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": -3,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 93,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 1.5,
+        "Y": 43.5
+      },
+      "LabelPoint2": {
+        "X": 93,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -100.5,
+        "Y": -43.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 94.5,
+        "Y": -34.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -91.5,
+        "Y": 64.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 99,
+        "Y": 51
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -90,
+        "Y": -36
+      },
+      "InnerTopRightLabelBox": {
+        "X": 87,
+        "Y": -28.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -88.5,
+        "Y": 31.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 90,
+        "Y": 27
+      },
+      "MainSpdId": 46,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 21,
+      "LableSpdId": 96
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 19,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -37.5
+      },
+      "MainIconPoint2": {
+        "X": 91.5,
+        "Y": 142.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": -4.5,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 64.5,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": -1.5,
+        "Y": 43.5
+      },
+      "LabelPoint2": {
+        "X": 64.5,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -88.5,
+        "Y": -28.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 96,
+        "Y": -51
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -91.5,
+        "Y": 63
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 90,
+        "Y": 57
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -78,
+        "Y": -22.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 85.5,
+        "Y": -37.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -85.5,
+        "Y": 31.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 79.5,
+        "Y": 28.5
+      },
+      "MainSpdId": 54,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 29,
+      "LableSpdId": 91
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 20,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": -42,
+        "Y": -43.5
+      },
+      "MainIconPoint2": {
+        "X": 139.5,
+        "Y": 195
+      },
+      "unk2": [
+        94.5,
+        -46.5,
+        49.5,
+        381
+      ],
+      "Kanji1": {
+        "X": -16,
+        "Y": -30
+      },
+      "KanjiPoint2": {
+        "X": 148,
+        "Y": 45
+      },
+      "LabelPoint1": {
+        "X": -16,
+        "Y": 23
+      },
+      "LabelPoint2": {
+        "X": 148,
+        "Y": 20
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -185,
+        "Y": -73
+      },
+      "OuterTopRightLabelBox": {
+        "X": 145,
+        "Y": -81
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -167,
+        "Y": 51
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 148,
+        "Y": 35
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -173,
+        "Y": -66
+      },
+      "InnerTopRightLabelBox": {
+        "X": 136,
+        "Y": -67
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -163,
+        "Y": 12
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 135,
+        "Y": 5
+      },
+      "MainSpdId": 58,
+      "MainSpd2Unused": 59,
+      "KanjiSpdId": 33,
+      "LableSpdId": 104
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 21,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -39
+      },
+      "MainIconPoint2": {
+        "X": 108,
+        "Y": 144
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": -3
+      },
+      "KanjiPoint2": {
+        "X": 78,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 4.5,
+        "Y": 42
+      },
+      "LabelPoint2": {
+        "X": 78,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -103.5,
+        "Y": -33
+      },
+      "OuterTopRightLabelBox": {
+        "X": 93,
+        "Y": -43.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -91.5,
+        "Y": 64.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 97.5,
+        "Y": 51
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -94.5,
+        "Y": -27
+      },
+      "InnerTopRightLabelBox": {
+        "X": 85.5,
+        "Y": -37.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -84,
+        "Y": 36
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 90,
+        "Y": 16.5
+      },
+      "MainSpdId": 53,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 30,
+      "LableSpdId": 99
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 22,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -147,
+        "Y": -120
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -36
+      },
+      "MainIconPoint2": {
+        "X": 93,
+        "Y": 145.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 78,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 6,
+        "Y": 45
+      },
+      "LabelPoint2": {
+        "X": 78,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -103.5,
+        "Y": -37.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 100.5,
+        "Y": -37.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -91.5,
+        "Y": 70.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 100.5,
+        "Y": 52.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -96,
+        "Y": -31.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 88.5,
+        "Y": -31.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -84,
+        "Y": 37.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 91.5,
+        "Y": 27
+      },
+      "MainSpdId": 52,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 27,
+      "LableSpdId": 95
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 23,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 24,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 25,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -37.5
+      },
+      "MainIconPoint2": {
+        "X": 112.5,
+        "Y": 168
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 78,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 3,
+        "Y": 45
+      },
+      "LabelPoint2": {
+        "X": 78,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -96,
+        "Y": -40.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 94.5,
+        "Y": -36
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -88.5,
+        "Y": 64.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 88.5,
+        "Y": 61.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -87,
+        "Y": -31.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 85.5,
+        "Y": -31.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -82.5,
+        "Y": 34.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 82.5,
+        "Y": 25.5
+      },
+      "MainSpdId": 56,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 31,
+      "LableSpdId": 94
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 26,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 63,
+        "Y": 24
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 282,
+        "Y": 129
+      },
+      "MainIconPoint2": {
+        "X": 360,
+        "Y": 111
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": -3,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 171,
+        "Y": 42
+      },
+      "LabelPoint1": {
+        "X": 12,
+        "Y": 55.5
+      },
+      "LabelPoint2": {
+        "X": 171,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -202.5,
+        "Y": -25.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 190.5,
+        "Y": -63
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -186,
+        "Y": 100.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 199.5,
+        "Y": 46.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -192,
+        "Y": -18
+      },
+      "InnerTopRightLabelBox": {
+        "X": 178.5,
+        "Y": -58.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -177,
+        "Y": 66
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 189,
+        "Y": 12
+      },
+      "MainSpdId": 50,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 25,
+      "LableSpdId": 105
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 27,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -39
+      },
+      "MainIconPoint2": {
+        "X": 76.5,
+        "Y": 165
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": -1.5,
+        "Y": 3
+      },
+      "KanjiPoint2": {
+        "X": 105,
+        "Y": 37.5
+      },
+      "LabelPoint1": {
+        "X": 3,
+        "Y": 46.5
+      },
+      "LabelPoint2": {
+        "X": 105,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -117,
+        "Y": -33
+      },
+      "OuterTopRightLabelBox": {
+        "X": 102,
+        "Y": -46.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -106.5,
+        "Y": 75
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 112.5,
+        "Y": 54
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -108,
+        "Y": -30
+      },
+      "InnerTopRightLabelBox": {
+        "X": 94.5,
+        "Y": -37.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -99,
+        "Y": 37.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 105,
+        "Y": 22.5
+      },
+      "MainSpdId": 45,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 20,
+      "LableSpdId": 107
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 28,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -46.5
+      },
+      "MainIconPoint2": {
+        "X": 163.5,
+        "Y": 177
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 132,
+        "Y": 39
+      },
+      "LabelPoint1": {
+        "X": -3,
+        "Y": 54
+      },
+      "LabelPoint2": {
+        "X": 132,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -148.5,
+        "Y": -51
+      },
+      "OuterTopRightLabelBox": {
+        "X": 160.5,
+        "Y": -42
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -151.5,
+        "Y": 67.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 141,
+        "Y": 84
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -135,
+        "Y": -37.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 144,
+        "Y": -36
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -144,
+        "Y": 28.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 138,
+        "Y": 43.5
+      },
+      "MainSpdId": 48,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 23,
+      "LableSpdId": 102
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 29,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": -153,
+        "Y": 58.5
+      },
+      "MainIconPoint2": {
+        "X": 208.5,
+        "Y": 48
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 30,
+        "Y": -15
+      },
+      "KanjiPoint2": {
+        "X": 99,
+        "Y": 39
+      },
+      "LabelPoint1": {
+        "X": 31.5,
+        "Y": 40.5
+      },
+      "LabelPoint2": {
+        "X": 99,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -118.5,
+        "Y": -78
+      },
+      "OuterTopRightLabelBox": {
+        "X": 159,
+        "Y": -57
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -109.5,
+        "Y": 60
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 163.5,
+        "Y": 54
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -108,
+        "Y": -66
+      },
+      "InnerTopRightLabelBox": {
+        "X": 153,
+        "Y": -52.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -100.5,
+        "Y": 22.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 151.5,
+        "Y": 24
+      },
+      "MainSpdId": 49,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 24,
+      "LableSpdId": 101
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 30,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -37.5
+      },
+      "MainIconPoint2": {
+        "X": 106.5,
+        "Y": 172.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": -1.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 93,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 46.5
+      },
+      "LabelPoint2": {
+        "X": 93,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -112.5,
+        "Y": -42
+      },
+      "OuterTopRightLabelBox": {
+        "X": 100.5,
+        "Y": -36
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -100.5,
+        "Y": 70.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 108,
+        "Y": 55.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -97.5,
+        "Y": -34.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 93,
+        "Y": -30
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -97.5,
+        "Y": 36
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 100.5,
+        "Y": 28.5
+      },
+      "MainSpdId": 47,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 22,
+      "LableSpdId": 100
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 31,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainIconPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 0
+      },
+      "KanjiPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint1": {
+        "X": 0,
+        "Y": 0
+      },
+      "LabelPoint2": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerTopRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 0,
+        "Y": 0
+      },
+      "MainSpdId": 255,
+      "MainSpd2Unused": 255,
+      "KanjiSpdId": 255,
+      "LableSpdId": 255
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 32,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -37.5
+      },
+      "MainIconPoint2": {
+        "X": 136.5,
+        "Y": 232.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 0,
+        "Y": 4.5
+      },
+      "KanjiPoint2": {
+        "X": 64.5,
+        "Y": 39
+      },
+      "LabelPoint1": {
+        "X": 6,
+        "Y": 51
+      },
+      "LabelPoint2": {
+        "X": 64.5,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -117,
+        "Y": -40.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 106.5,
+        "Y": -36
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -96,
+        "Y": 78
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 115.5,
+        "Y": 57
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -103.5,
+        "Y": -31.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 97.5,
+        "Y": -30
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -94.5,
+        "Y": 43.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 103.5,
+        "Y": 28.5
+      },
+      "MainSpdId": 57,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 32,
+      "LableSpdId": 103
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 33,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": -180,
+        "Y": -120
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -40.5
+      },
+      "MainIconPoint2": {
+        "X": 100.5,
+        "Y": 133.5
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 105,
+        "Y": 37.5
+      },
+      "LabelPoint1": {
+        "X": 1.5,
+        "Y": 49.5
+      },
+      "LabelPoint2": {
+        "X": 105,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -118.5,
+        "Y": -45
+      },
+      "OuterTopRightLabelBox": {
+        "X": 108,
+        "Y": -37.5
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -112.5,
+        "Y": 70.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 106.5,
+        "Y": 58.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -102,
+        "Y": -36
+      },
+      "InnerTopRightLabelBox": {
+        "X": 99,
+        "Y": -31.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -103.5,
+        "Y": 36
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 100.5,
+        "Y": 30
+      },
+      "MainSpdId": 55,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 28,
+      "LableSpdId": 106
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 34,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -37.5
+      },
+      "MainIconPoint2": {
+        "X": 112.5,
+        "Y": 168
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 78,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 3,
+        "Y": 45
+      },
+      "LabelPoint2": {
+        "X": 78,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -96,
+        "Y": -40.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 94.5,
+        "Y": -36
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -88.5,
+        "Y": 64.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 88.5,
+        "Y": 61.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -87,
+        "Y": -31.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 85.5,
+        "Y": -31.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -82.5,
+        "Y": 34.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 82.5,
+        "Y": 25.5
+      },
+      "MainSpdId": 203,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 204,
+      "LableSpdId": 205
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  },
+  {
+    "Id": 35,
+    "SpriteParams": {
+      "PlayerIconPos": {
+        "X": 0,
+        "Y": 0
+      },
+      "unk1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "MainIconPoint1": {
+        "X": 0,
+        "Y": -37.5
+      },
+      "MainIconPoint2": {
+        "X": 112.5,
+        "Y": 168
+      },
+      "unk2": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "Kanji1": {
+        "X": 1.5,
+        "Y": 1.5
+      },
+      "KanjiPoint2": {
+        "X": 78,
+        "Y": 34.5
+      },
+      "LabelPoint1": {
+        "X": 3,
+        "Y": 45
+      },
+      "LabelPoint2": {
+        "X": 78,
+        "Y": 19.5
+      },
+      "OuterTopLeftLabelBox": {
+        "X": -96,
+        "Y": -40.5
+      },
+      "OuterTopRightLabelBox": {
+        "X": 94.5,
+        "Y": -36
+      },
+      "OuterBottomLeftLabelBox": {
+        "X": -88.5,
+        "Y": 64.5
+      },
+      "OuterBottomRightLabelBox": {
+        "X": 88.5,
+        "Y": 61.5
+      },
+      "InnerTopLeftLabelBox": {
+        "X": -87,
+        "Y": -31.5
+      },
+      "InnerTopRightLabelBox": {
+        "X": 85.5,
+        "Y": -31.5
+      },
+      "InnerBottomLeftLabelBox": {
+        "X": -82.5,
+        "Y": 34.5
+      },
+      "InnerBottomRightLabelBox": {
+        "X": 82.5,
+        "Y": 25.5
+      },
+      "MainSpdId": 206,
+      "MainSpd2Unused": 0,
+      "KanjiSpdId": 207,
+      "LableSpdId": 208
+    },
+    "LmapConfidantFields": [
+      {
+        "FieldMajorId": 0,
+        "FieldMinorId": 0
+      }
+    ]
+  }
+]
