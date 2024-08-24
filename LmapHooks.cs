@@ -281,7 +281,7 @@ namespace Unhardcoded_P5R
                     {
                         lmapImageInfo->fileNameTableIndex1 = -1;
                         lmapImageInfo->fileNameTableIndex2 = -1;
-                        lmapImageInfo->lmapImageData = _utils.loadDDS(image.ImagePath);
+                        lmapImageInfo->lmapImageData = _utils.loadDDS(Path.Combine("field/panel/lmap/", image.ImagePath));
                         lmapImageInfo->lmapImageBitflag = lmapImageInfo->lmapImageBitflag & 0xfffffffe | 0x20000;
                         return -1;
                     }
@@ -327,7 +327,7 @@ namespace Unhardcoded_P5R
         /// <summary>
         /// Sprite parameters for sprites that show up on the railmap
         /// </summary>
-        public LmapSpriteParams SpriteParams;
+        public LmapSpriteParams? SpriteParams;
 
         /// <summary>
         /// Fields that will show a card if a confidant is available there.
