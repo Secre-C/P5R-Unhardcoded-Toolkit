@@ -1,0 +1,125 @@
+[
+  {
+    "ImagePath": "shibuya",
+    "Fields": [
+      {
+        "FieldMajorId": 1,
+        "FieldMinorId": -1
+      },
+      {
+        "FieldMajorId": 4,
+        "FieldMinorId": -1
+      },
+      {
+        "FieldMajorId": 3,
+        "FieldMinorId": 10
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 2
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 5
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 6
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 8
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 9
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 18
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 19
+      }
+    ]
+  },
+  {
+    "ImagePath": "yoncha",
+    "Fields": [
+      {
+        "FieldMajorId": 3,
+        "FieldMinorId": -1
+      },
+      {
+        "FieldMajorId": 9,
+        "FieldMinorId": -1
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 1
+      },
+      {
+        "FieldMajorId": 11,
+        "FieldMinorId": 6
+      }
+    ]
+  },
+  {
+    "ImagePath": "aoyama",
+    "Fields": [
+      {
+        "FieldMajorId": 2,
+        "FieldMinorId": -1
+      },
+      {
+        "FieldMajorId": 11,
+        "FieldMinorId": 4
+      }
+    ]
+  },
+  {
+    "ImagePath": "shinjuku",
+    "Fields": [
+      {
+        "FieldMajorId": 6,
+        "FieldMinorId": -1
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 12
+      }
+    ]
+  },
+  {
+    "ImagePath": "akiba",
+    "Fields": [
+      {
+        "FieldMajorId": 7,
+        "FieldMinorId": -1
+      },
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 11
+      }
+    ]
+  },
+  {
+    "ImagePath": "kanda",
+    "Fields": [
+      {
+        "FieldMajorId": 10,
+        "FieldMinorId": 4
+      }
+    ]
+  },
+  {
+    "ImagePath": "kichijoji",
+    "Fields": [
+      {
+        "FieldMajorId": 5,
+        "FieldMinorId": -1
+      }
+    ]
+  }
+]
