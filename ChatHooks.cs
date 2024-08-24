@@ -13,7 +13,7 @@ namespace Unhardcoded_P5R
 {
     internal unsafe class ChatHooks
     {
-        [Function(new[] { Register.rdx, Register.rax }, Register.rdx, true, new[] {Register.r8})]
+        [Function(new[] { Register.rdx, Register.rax }, Register.rdx, true, new[] { Register.r8 })]
         private delegate uint d_GetIconBgColor(nint colorTable, short index);
         private d_GetIconBgColor _getIconBgColor;
 
@@ -99,7 +99,7 @@ namespace Unhardcoded_P5R
             {
                 nint hookInstruction = chatIconBgColor + 8;
                 nint colorTableAddress = (nint)(*(int*)(chatIconBgColor + 4) + 0x140000000);
-                
+
                 string[] asm =
                 {
                     $"use64",
@@ -210,7 +210,7 @@ namespace Unhardcoded_P5R
                     "getChatName", (getChatName) =>
             {
                 _getChatName = hooks.CreateHook<GetChatName>((a1) =>
-                {            
+                {
                     if (_expandedChatIconParamDict.TryGetValue(a1, out var chatIconParams) && chatIconParams.Name != null)
                     {
                         return Marshal.StringToHGlobalAnsi(chatIconParams.Name);
@@ -245,7 +245,7 @@ namespace Unhardcoded_P5R
                 PropertyNameCaseInsensitive = true,
                 IncludeFields = true,
                 AllowTrailingCommas = true,
-                
+
             };
 
             var iconParams = (List<ChatIconParams>)JsonSerializer.Deserialize(File.ReadAllText(filePath), typeof(List<ChatIconParams>), options);

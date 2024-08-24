@@ -101,6 +101,9 @@ namespace Unhardcoded_P5R
 
             var lmapSpriteParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSpriteParams.json");
             _lmapHooks.ReadLmapSpriteParamFile(lmapSpriteParamFilePath);
+
+            var lmapSilhouetteFieldsFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSilhouetteFields.json");
+            _lmapHooks.ReadLmapSilhouetteFieldFile(lmapSilhouetteFieldsFilePath);
         }
 
         private void OnModLoaderInitialized()

@@ -14,7 +14,7 @@ namespace Unhardcoded_P5R
         internal delegate bool FileExists(string filepath);
         internal delegate PtrToFileHandle* d_OpenFile(string a1);
         internal delegate int FsSync(fileHandleStruct* a1);
-        internal delegate long LoadDDS(string a1);
+        internal delegate nint LoadDDS(string a1);
         internal delegate long FlowscriptGetIntArg(int a1);
 
         internal d_OpenFile openFile;
