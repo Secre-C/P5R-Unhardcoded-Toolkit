@@ -1,6 +1,6 @@
 [
   {
-    "ImagePath": "map_l_shibuya",
+    "ImageFileName": "map_l_shibuya.dds",
     "Fields": [
       {
         "FieldMajorId": 1,
@@ -45,7 +45,7 @@
     ]
   },
   {
-    "ImagePath": "map_l_yoncha",
+    "ImageFileName": "map_l_yoncha.dds",
     "Fields": [
       {
         "FieldMajorId": 3,
@@ -66,7 +66,7 @@
     ]
   },
   {
-    "ImagePath": "map_l_aoyama",
+    "ImageFileName": "map_l_aoyama.dds",
     "Fields": [
       {
         "FieldMajorId": 2,
@@ -79,7 +79,7 @@
     ]
   },
   {
-    "ImagePath": "map_l_shinjuku",
+    "ImageFileName": "map_l_shinjuku.dds",
     "Fields": [
       {
         "FieldMajorId": 6,
@@ -92,7 +92,7 @@
     ]
   },
   {
-    "ImagePath": "map_l_akiba",
+    "ImageFileName": "map_l_akiba.dds",
     "Fields": [
       {
         "FieldMajorId": 7,
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "ImagePath": "map_l_kanda",
+    "ImageFileName": "map_l_kanda.dds",
     "Fields": [
       {
         "FieldMajorId": 10,
@@ -114,7 +114,7 @@
     ]
   },
   {
-    "ImagePath": "map_l_kichijoji",
+    "ImageFileName": "map_l_kichijoji.dds",
     "Fields": [
       {
         "FieldMajorId": 5,

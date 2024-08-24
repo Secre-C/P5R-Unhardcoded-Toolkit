@@ -281,7 +281,7 @@ namespace Unhardcoded_P5R
                     {
                         lmapImageInfo->fileNameTableIndex1 = -1;
                         lmapImageInfo->fileNameTableIndex2 = -1;
-                        lmapImageInfo->lmapImageData = _utils.loadDDS(Path.Combine("field/panel/lmap/", image.ImagePath));
+                        lmapImageInfo->lmapImageData = _utils.loadDDS(Path.Combine("field/panel/lmap/", image.ImageFileName));
                         lmapImageInfo->lmapImageBitflag = lmapImageInfo->lmapImageBitflag & 0xfffffffe | 0x20000;
                         return -1;
                     }
@@ -396,7 +396,7 @@ namespace Unhardcoded_P5R
 
     public class LmapSilhouetteImageFields
     {
-        public string ImagePath;
+        public string ImageFileName;
         public P5RField[] Fields;
     }
 
