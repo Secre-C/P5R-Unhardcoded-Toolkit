@@ -73,39 +73,10 @@ namespace Unhardcoded_P5R
             _findCmmField1 = FindCmmField;
             _findCmmField2 = FindCmmField;
 
-            nint loadLmapFtdsAdr = 0;
-
-            nint FUN_1412f1d70adr = 0;
-            nint FUN_1401f9f10adr = 0;
             nint getMapImageAdr = 0;
             nint FUN_14eec6d60adr = 0;
 
             nint mapImagePtr = 0;
-
-            List<nint> lmapCmmIdPtrInstructions = new();
-
-            string[] lmapCmmIdPtrPatterns = {
-                "4C 8D 15 ?? ?? ?? ?? 48 69 D1 90 02 00 00",
-                "4C 8D 25 ?? ?? ?? ?? 41 8B 4C ?? ??",
-                "48 8D 3D ?? ?? ?? ?? 48 8D 1C C5 00 00 00 00",
-                "48 8D 1D ?? ?? ?? ?? 33 FF 48 8D 2D ?? ?? ?? ??"
-            };
-
-            List<nint> lmapCmmLimitInstructions = new();
-
-            string[] lmapCmmLimitPatterns = {
-                "41 83 FB 19 73 ?? 45 8B 4A ??",
-                "83 FE 19 73 ??",
-                "83 F9 19 73 ?? 48 63 C1",
-                "83 FF 19 73 ?? 8B 4B ??"
-            };
-
-            List<nint> lmapCmmListEndPtrInstructions = new();
-
-            string[] lmapCmmListEndPtrPatterns = {
-                "48 8D 05 ?? ?? ?? ?? 49 83 C2 08",
-                "48 8D 2D ?? ?? ?? ?? 85 FF",
-            };
 
             List<nint> lmapFieldPtrInstructions = new();
 
@@ -133,41 +104,6 @@ namespace Unhardcoded_P5R
             {
                 lmapParamTable = _utils.GetAddressFromGlobalRef(result, 7);
             });
-
-            utils.SigScan("48 89 5C 24 ?? 57 48 83 EC 20 48 8B D9 48 63 FA B9 F0 03 00 00", "FUN_1412f1d70adr", (result) =>
-            {
-                FUN_1412f1d70adr = result;
-            });
-
-            utils.SigScan("48 89 5C 24 ?? 57 48 83 EC 20 48 8B D9 8B FA 48 8D 0D ?? ?? ?? ?? FF 15 ?? ?? ?? ?? B8 FF FF FF FF F0 0F C1 43 ?? 83 F8 01 75 ?? F7 03 80 00 00 80", "FUN_1401f9f10adr", (result) =>
-            {
-                FUN_1401f9f10adr = result;
-            });
-
-            for (int i = 0; i < lmapCmmIdPtrPatterns.Length; i++)
-            {
-                utils.SigScan(lmapCmmIdPtrPatterns[i], $"FUN_1401f9f10adr[{i}]", (result) =>
-                {
-                    lmapCmmIdPtrInstructions.Add(result);
-                });
-            }
-
-            for (int i = 0; i < lmapCmmLimitPatterns.Length; i++)
-            {
-                utils.SigScan(lmapCmmLimitPatterns[i], $"lmapCmmLimitInstructions[{i}]", (result) =>
-                {
-                    lmapCmmLimitInstructions.Add(result);
-                });
-            }
-
-            for (int i = 0; i < lmapCmmListEndPtrPatterns.Length; i++)
-            {
-                utils.SigScan(lmapCmmListEndPtrPatterns[i], $"lmapCmmListEndPtrInstructions[{i}]", (result) =>
-                {
-                    lmapCmmListEndPtrInstructions.Add(result);
-                });
-            }
-
 
             for (int i = 0; i < lmapFieldPtrPatterns.Length; i++)
             {
@@ -482,42 +418,6 @@ namespace Unhardcoded_P5R
                     return 0x18;
                 default:
                     return param_1;
-            }
-        }
-
-        private void LmapCmmHooks(IReloadedHooks hooks, Utils utils, List<nint> lmapCmmPtrInstructions, List<nint> lmapCmmLimitInstructions, List<nint> lmapCmmListEndPtrInstructions)
-        {
-            var memory = Memory.Instance;
-
-            string newCmmFile = @"field/panel/lmap/lmapCmmIds.dat";
-
-            string[] cmmIdListRegisters = { "r10", "r12", "rdi", "rbx" };
-            string[] cmmIdEndListRegisters = { "rax", "rbp" };
-
-            var newFile = utils.OpenFile(newCmmFile, 0);
-
-            var fileBuffer = newFile->bufferSize;
-
-            var fileAddress = newFile->pointerToFile;
-
-            for (int i = 0; i < lmapCmmPtrInstructions.Count; i++)
-            {
-                string[] CmmListPointerAsm = { $"use64", $"mov {cmmIdListRegisters[i]}, 0x{fileAddress:X8}" };
-                _cmmLmapTablePtr = hooks.CreateAsmHook(CmmListPointerAsm, lmapCmmPtrInstructions[i], Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-            }
-
-            for (int i = 0; i < lmapCmmLimitInstructions.Count; i++) // update corptbl id limit
-            {
-                if (i == 0)
-                    memory.SafeWrite(lmapCmmLimitInstructions[i] + 3, (byte)(fileBuffer / 8));
-                else
-                    memory.SafeWrite(lmapCmmLimitInstructions[i] + 2, (byte)(fileBuffer / 8));
-            }
-
-            for (int i = 0; i < lmapCmmListEndPtrInstructions.Count; i++)
-            {
-                string[] CmmListEndAsm = { $"use64", $"mov {cmmIdEndListRegisters[i]}, 0x{fileAddress + fileBuffer:X8}" };
-                _cmmLmapTableEnd = hooks.CreateAsmHook(CmmListEndAsm, lmapCmmListEndPtrInstructions[i], Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             }
         }
     }
