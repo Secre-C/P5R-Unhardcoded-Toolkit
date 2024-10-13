@@ -10,6 +10,7 @@ namespace Unhardcoded_P5R
         private delegate void PlaceShopBanner(long a1, ShopInfo* shopInfo);
 
         private delegate long d_GetDDSStringAdr();
+        private d_GetDDSStringAdr _getDDSStringAdr;
 
         private IHook<LoadShopBanner> _loadShopBanner;
         private IHook<PlaceShopBanner> _placeShopBanner;
@@ -32,12 +33,12 @@ namespace Unhardcoded_P5R
             {
                 Shop2BannerStringPtr = utils.GetAddressFromGlobalRef(Shop2BannerStringPtrInstr, 7, "Shop2BannerStringPtr");
 
-                var getStringFunc = new d_GetDDSStringAdr(GetDDSStringAdr);
+                _getDDSStringAdr = GetDDSStringAdr;
                 string[] asm =
                 {
                     "use64",
                     Utils.PushCallerRegisters,
-                    hooks.Utilities.GetAbsoluteCallMnemonics(getStringFunc, out var reverseWrapper),
+                    hooks.Utilities.GetAbsoluteCallMnemonics(_getDDSStringAdr, out var reverseWrapper),
                     Utils.PopCallerRegisters,
                     "mov rcx, rax"
                 };

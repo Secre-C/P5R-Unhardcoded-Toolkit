@@ -271,8 +271,6 @@ namespace Unhardcoded_P5R
         {
             var field = _getFieldWork()->FieldInfo->Field;
 
-            _utils.DebugLog($"Field {field}");
-
             foreach (var image in _lmapSilhouetteImageFields)
             {
                 foreach (var fieldId in image.Fields)
@@ -281,7 +279,7 @@ namespace Unhardcoded_P5R
                     {
                         lmapImageInfo->fileNameTableIndex1 = -1;
                         lmapImageInfo->fileNameTableIndex2 = -1;
-                        lmapImageInfo->lmapImageData = _utils.loadDDS(Path.Combine("field/panel/lmap/", image.ImageFileName));
+                        lmapImageInfo->lmapImageData = _utils.loadDDS("field/panel/lmap/" + image.ImageFileName);
                         lmapImageInfo->lmapImageBitflag = lmapImageInfo->lmapImageBitflag & 0xfffffffe | 0x20000;
                         return -1;
                     }
@@ -341,6 +339,8 @@ namespace Unhardcoded_P5R
         [FieldOffset(0)]
         public Vector2 PlayerIconPos;
         [FieldOffset(8)]
+        public Vector2 CmmCardIconPos;
+        [FieldOffset(0x10)]
         public float[] unk1;
         [FieldOffset(0x28)]
         public Vector2 MainIconPoint1;
