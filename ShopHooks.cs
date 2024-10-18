@@ -47,7 +47,7 @@ namespace Unhardcoded_P5R
                 _shop2BannerStringPtr = hooks.CreateAsmHook(asm, Shop2BannerStringPtrInstr, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             });
 
-            utils.SigScan("48 89 5C 24 ?? 48 89 7C 24 ?? 41 56 48 83 EC 60", "LoadShopBanner", (loadShopBannerAdr) =>
+            utils.SigScan("48 89 5C 24 ?? 41 56 48 83 EC 20 48 89 6C 24 ?? 4C 8B F1", "LoadShopBanner", (loadShopBannerAdr) =>
             {
                 _loadShopBanner = hooks.CreateHook<LoadShopBanner>((a1, shopInfo) =>
                 {
@@ -67,7 +67,7 @@ namespace Unhardcoded_P5R
                 }, loadShopBannerAdr).Activate();
             });
 
-            utils.SigScan("4C 8B DC 49 89 53 ?? 55 41 54 41 55 48 81 EC E0 00 00 00", "PlaceShopBanner", (placeShopBannerAdr) =>
+            utils.SigScan("4C 8B DC 41 54 41 55 41 57 48 81 EC 20 01 00 00", "PlaceShopBanner", (placeShopBannerAdr) =>
             {
                 _placeShopBanner = hooks.CreateHook<PlaceShopBanner>((a1, shopInfo) =>
                 {
