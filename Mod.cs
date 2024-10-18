@@ -89,19 +89,27 @@ namespace Unhardcoded_P5R
 
         private void OnModLoading(IModV1 mod, IModConfigV1 modConfig)
         {
-            var chatIconParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "ChatIconParams.json");
-            _chatHooks.ReadChatIconParamFile(chatIconParamFilePath);
+            if (_configuration.ChatHooks)
+            {
+                var chatIconParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "ChatIconParams.json");
+                _chatHooks.ReadChatIconParamFile(chatIconParamFilePath);
+            }
 
-            var lmapSpriteParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSpriteParams.json");
-            _lmapHooks.ReadLmapSpriteParamFile(lmapSpriteParamFilePath);
+            if (_configuration.LmapHooks)
+            {
+                var lmapSpriteParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSpriteParams.json");
+                _lmapHooks.ReadLmapSpriteParamFile(lmapSpriteParamFilePath);
 
-            var lmapSilhouetteFieldsFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSilhouetteFields.json");
-            _lmapHooks.ReadLmapSilhouetteFieldFile(lmapSilhouetteFieldsFilePath);
+                var lmapSilhouetteFieldsFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSilhouetteFields.json");
+                _lmapHooks.ReadLmapSilhouetteFieldFile(lmapSilhouetteFieldsFilePath);
+            }
+
         }
 
         private void OnModLoaderInitialized()
         {
-            _lmapHooks.WriteNewLmapParamTable();
+            if (_configuration.LmapHooks)
+                _lmapHooks.WriteNewLmapParamTable();
         }
 
         #region Standard Overrides
