@@ -62,7 +62,7 @@ namespace Unhardcoded_P5R
 
             _getLmapSilhouetteImage = GetLmapSilhouetteImage;
 
-            utils.SigScan("4C 8D 15 ?? ?? ?? ?? F3 43 0F 10 5C", "lmapParamTable", (result) => //Lmap SPD Parameters (data scan)
+            utils.SigScan("4C 8D 15 ?? ?? ?? ?? F3 42 0F 10 5C", "lmapParamTable", (result) => //Lmap SPD Parameters (data scan)
             {
                 lmapParamTable = _utils.GetAddressFromGlobalRef(result, 7);
             });
@@ -75,7 +75,7 @@ namespace Unhardcoded_P5R
                 }, lmapIdtoPointerIndexAdr).Activate();
             });
 
-            utils.SigScan("48 83 EC 28 4C 8B 05 ?? ?? ?? ?? 4D 85 C0 0F 84 ?? ?? ?? ??", "FUN_14eec6d60adr", (result) =>
+            utils.SigScan("40 53 48 83 EC 20 48 8B 1D ?? ?? ?? ?? 48 85 DB 0F 84 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ??", "getFieldWork", (result) =>
             {
                 _getFieldWork = hooks.CreateWrapper<GetFieldWork>(result, out var wrapper);
             });
@@ -142,7 +142,7 @@ namespace Unhardcoded_P5R
                 });
             });
 
-            utils.SigScan("83 F8 FF 74 ?? 48 63 C8 89 83 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 48 8B 8C", "LoadMap_l_Image", (result) => // Load Map L image 0x14135c9b6
+            utils.SigScan("83 F8 FF 74 ?? 48 63 C8 45 33 C0 89 83 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 49 8B 8C", "LoadMap_l_Image", (result) => // Load Map L silhouette image 0x14135c9b6
             {
                 string[] asm =
                 {

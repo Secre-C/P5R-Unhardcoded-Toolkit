@@ -38,7 +38,7 @@ namespace Unhardcoded_P5R
             using var thisProcess = Process.GetCurrentProcess();
             baseAddress = thisProcess.MainModule.BaseAddress.ToInt64();
 
-            SigScan("48 89 5C 24 ?? 57 48 83 EC 60 48 89 CB 45 31 C0", "LoadDDS", (loadDDSAdr) =>
+            SigScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 83 EC 60 48 89 CD 89 D6", "LoadDDS", (loadDDSAdr) =>
                 loadDDS = hooks.CreateWrapper<LoadDDS>(loadDDSAdr, out _));
 
             SigScan("48 89 5C 24 ?? 57 48 81 EC 20 02 00 00 33 FF", "FileExists", (optionalOpenFileAdr) =>
