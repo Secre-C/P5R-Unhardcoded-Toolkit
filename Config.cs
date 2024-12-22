@@ -55,8 +55,13 @@ namespace Unhardcoded_P5R.Configuration
         [DefaultValue(true)]
         public bool SelCutinHooks { get; set; } = true;
 
+        [DisplayName("Item Icon Module")]
+        [Description("Item Icon Moduler Placeholder description")]
+        [DefaultValue(true)]
+        public bool ItemIconHooks { get; set; } = true;
+
         [DisplayName("Field Model Num Module")]
-        [Description("Unhardcodes Field model num table in favor of checking for a field model files existence.")]
+        [Description("Unhardcodes the table that determines how many field models an overworld field will load in favor of incrementally checking if the models exist.")]
         [DefaultValue(true)]
         public bool FieldModelNumHooks { get; set; } = true;
     }
