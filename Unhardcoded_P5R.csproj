@@ -38,7 +38,7 @@
     <Content Include="ModConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Update="P5REssentials\**">
+    <None Update="UnhardcodedP5R\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Preview.png">
@@ -72,19 +72,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <NativeLibs Remove="ConfidantHooks.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <NativeLibs Remove="SelCutinHooks.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <NativeLibs Remove="ItemIcons.cs" />
+    <NativeLibs Remove="FieldModelNumHooks.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <NativeLibs Remove="FieldModelNumHooks.cs" />
+    <NativeLibs Remove="Converters.cs" />
   </ItemGroup>
 
 </Project>

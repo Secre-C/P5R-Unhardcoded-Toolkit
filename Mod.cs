@@ -1,5 +1,6 @@
 ﻿using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
+using Reloaded.Mod.Interfaces.Internal;
 using Unhardcoded_P5R.Configuration;
 using Unhardcoded_P5R.Template;
 
@@ -45,7 +46,6 @@ namespace Unhardcoded_P5R
         private ChatHooks _chatHooks = null!;
         private LmapHooks _lmapHooks = null!;
         private ShopHooks _shopHooks = null!;
-        private ConfidantHooks _confidantHooks = null!;
         private SelCutinHooks _selCutinHooks = null!;
         private FieldModelNumHooks _fieldModelNumHooks = null!;
         public Mod(ModContext context)
@@ -69,13 +69,10 @@ namespace Unhardcoded_P5R
             _utils = new Utils(_hooks, _logger, _modLoader, _configuration);
 
             if (_configuration.ChatHooks)
-                _chatHooks = new ChatHooks(_hooks, _utils);
+                _chatHooks = new ChatHooks(_modLoader, _hooks, _utils);
 
             if (_configuration.LmapHooks)
                 _lmapHooks = new LmapHooks(_hooks, _utils);
-
-            if (_configuration.ConfidantHooks)
-                _confidantHooks = new ConfidantHooks(_hooks, _utils);
 
             if (_configuration.ShopHooks)
                 _shopHooks = new ShopHooks(_hooks, _utils);
@@ -85,6 +82,34 @@ namespace Unhardcoded_P5R
 
             if (_configuration.FieldModelNumHooks)
                 _fieldModelNumHooks = new FieldModelNumHooks(_hooks, _utils);
+
+            _modLoader.ModLoading += OnModLoading;
+            _modLoader.OnModLoaderInitialized += OnModLoaderInitialized;
+        }
+
+        private void OnModLoading(IModV1 mod, IModConfigV1 modConfig)
+        {
+            if (_configuration.ChatHooks)
+            {
+                var chatIconParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "ChatIconParams.json");
+                _chatHooks.ReadChatIconParamFile(chatIconParamFilePath);
+            }
+
+            if (_configuration.LmapHooks)
+            {
+                var lmapSpriteParamFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSpriteParams.json");
+                _lmapHooks.ReadLmapSpriteParamFile(lmapSpriteParamFilePath);
+
+                var lmapSilhouetteFieldsFilePath = Path.Join(_modLoader.GetDirectoryForModId(modConfig.ModId), "UnhardcodedP5R", "LmapSilhouetteFields.json");
+                _lmapHooks.ReadLmapSilhouetteFieldFile(lmapSilhouetteFieldsFilePath);
+            }
+
+        }
+
+        private void OnModLoaderInitialized()
+        {
+            if (_configuration.LmapHooks)
+                _lmapHooks.WriteNewLmapParamTable();
         }
 
         #region Standard Overrides
