@@ -10,6 +10,7 @@ namespace Unhardcoded_P5R
         private delegate void PlaceShopBanner(long a1, ShopInfo* shopInfo);
 
         private delegate long d_GetDDSStringAdr();
+        private d_GetDDSStringAdr _getDDSStringAdr;
 
         private IHook<LoadShopBanner> _loadShopBanner;
         private IHook<PlaceShopBanner> _placeShopBanner;
@@ -32,12 +33,12 @@ namespace Unhardcoded_P5R
             {
                 Shop2BannerStringPtr = utils.GetAddressFromGlobalRef(Shop2BannerStringPtrInstr, 7, "Shop2BannerStringPtr");
 
-                var getStringFunc = new d_GetDDSStringAdr(GetDDSStringAdr);
+                _getDDSStringAdr = GetDDSStringAdr;
                 string[] asm =
                 {
                     "use64",
                     Utils.PushCallerRegisters,
-                    hooks.Utilities.GetAbsoluteCallMnemonics(getStringFunc, out var reverseWrapper),
+                    hooks.Utilities.GetAbsoluteCallMnemonics(_getDDSStringAdr, out var reverseWrapper),
                     Utils.PopCallerRegisters,
                     "mov rcx, rax"
                 };
@@ -46,7 +47,7 @@ namespace Unhardcoded_P5R
                 _shop2BannerStringPtr = hooks.CreateAsmHook(asm, Shop2BannerStringPtrInstr, Reloaded.Hooks.Definitions.Enums.AsmHookBehaviour.DoNotExecuteOriginal).Activate();
             });
 
-            utils.SigScan("48 89 5C 24 ?? 48 89 7C 24 ?? 41 56 48 83 EC 60", "LoadShopBanner", (loadShopBannerAdr) =>
+            utils.SigScan("48 89 5C 24 ?? 41 56 48 83 EC 20 48 89 6C 24 ?? 4C 8B F1", "LoadShopBanner", (loadShopBannerAdr) =>
             {
                 _loadShopBanner = hooks.CreateHook<LoadShopBanner>((a1, shopInfo) =>
                 {
@@ -66,7 +67,7 @@ namespace Unhardcoded_P5R
                 }, loadShopBannerAdr).Activate();
             });
 
-            utils.SigScan("4C 8B DC 49 89 53 ?? 55 41 54 41 55 48 81 EC E0 00 00 00", "PlaceShopBanner", (placeShopBannerAdr) =>
+            utils.SigScan("4C 8B DC 41 54 41 55 41 57 48 81 EC 20 01 00 00", "PlaceShopBanner", (placeShopBannerAdr) =>
             {
                 _placeShopBanner = hooks.CreateHook<PlaceShopBanner>((a1, shopInfo) =>
                 {
@@ -75,7 +76,7 @@ namespace Unhardcoded_P5R
                     short bannerId = shopDataTable[shopId].bannerId;
 
                     if (useCustomShopBanner())
-                        shopDataTable[shopId].bannerId = 2; //sets the BannerId to 2 temporarily to place the shop Banner correctly
+                        shopDataTable[shopId].bannerId = 2; // sets the BannerId to 2 temporarily to place the shop Banner correctly
 
                     _placeShopBanner.OriginalFunction(a1, shopInfo);
 

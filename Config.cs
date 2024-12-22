@@ -40,11 +40,6 @@ namespace Unhardcoded_P5R.Configuration
         [DefaultValue(true)]
         public bool LmapHooks { get; set; } = true;
 
-        [DisplayName("Confidant Module")]
-        [Description("Enables unhardcoded confidant module. ONLY DISABLE FOR TROUBLESHOOTING")]
-        [DefaultValue(true)]
-        public bool ConfidantHooks { get; set; } = true;
-
         [DisplayName("Shop Module")]
         [Description("Enables unhardcoded shop module. ONLY DISABLE FOR TROUBLESHOOTING")]
         [DefaultValue(true)]
