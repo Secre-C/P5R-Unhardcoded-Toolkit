@@ -76,7 +76,7 @@ namespace Unhardcoded_P5R
                     short bannerId = shopDataTable[shopId].bannerId;
 
                     if (useCustomShopBanner())
-                        shopDataTable[shopId].bannerId = 2; //sets the BannerId to 2 temporarily to place the shop Banner correctly
+                        shopDataTable[shopId].bannerId = 2; // sets the BannerId to 2 temporarily to place the shop Banner correctly
 
                     _placeShopBanner.OriginalFunction(a1, shopInfo);
 

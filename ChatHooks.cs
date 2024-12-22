@@ -21,7 +21,7 @@ namespace Unhardcoded_P5R
         private delegate nint d_GetIconParams(nint colorTable, nint ogOffset);
         private d_GetIconParams _getIconParams;
 
-        [Function(Register.rdi, Register.rdi, true)]
+        [Function(Register.rsi, Register.rsi, true)]
         private delegate int d_CreateExpandedChatNameList(int numOfOriginalEntries);
         private d_CreateExpandedChatNameList _createExpandedChatNameList;
 
@@ -95,11 +95,10 @@ namespace Unhardcoded_P5R
                 });
             });
 
-            utils.SigScan("41 8B 94 ?? ?? ?? ?? ?? 8B CA 8B C2 C1 E9 08 88 4C 24", "chatPhotoSenderIconBgColor", (chatIconBgColor) => // Chat Icon Background Color Pointer 0x1417c81ef
+            utils.SigScan("8B 94 ?? ?? ?? ?? ?? 8B CA 8B C2 C1 E9 08 88 4C 24", "chatPhotoSenderIconBgColor", (chatIconBgColor) => // Chat Icon Background Color Pointer 0x1417c81ef
             {
-                nint hookInstruction = chatIconBgColor + 8;
-                nint colorTableAddress = (nint)(*(int*)(chatIconBgColor + 4) + 0x140000000);
-
+                nint hookInstruction = chatIconBgColor + 7;
+                nint colorTableAddress = _utils.GetAddressFromGlobalRef(chatIconBgColor, 7);
                 string[] asm =
                 {
                     $"use64",
@@ -116,7 +115,7 @@ namespace Unhardcoded_P5R
 
             /* Params */
 
-            utils.SigScan("F3 44 0F 10 AC 24 ?? ?? ?? ?? 41 0F 28 CD F3 0F 59 0D ?? ?? ?? ?? 0F 28 C1 E8 ?? ?? ?? ?? 66 44 39 27", "GroupIconParam", (chatIconBgColor) => // Chat Icon Spd Parameter Pointer 0x1417c72e8
+            utils.SigScan("F3 44 0F 10 AC 24 ?? ?? ?? ?? 41 0F 28 CD F3 0F 59 0D", "GroupIconParam", (chatIconBgColor) => // Chat Icon Spd Parameter Pointer 0x1417c72e8
             {
                 string[] asm =
                 {
@@ -134,7 +133,7 @@ namespace Unhardcoded_P5R
                 });
             });
 
-            utils.SigScan("66 83 3B ?? 0F BF 53", "ImageSenderIconParam", (chatIconBgColor) => // Chat Icon Spd Parameter Pointer 0x1417c7a71
+            utils.SigScan("66 83 3F ?? 0F BF 57", "ImageSenderIconParam", (chatIconBgColor) => // Chat Icon Spd Parameter Pointer 0x1417c7a71
             {
                 string[] asm =
                 {
@@ -173,12 +172,12 @@ namespace Unhardcoded_P5R
             /* Name */
 
             // nop id bounds checks
-            _utils.SigScan("73 ?? 66 41 3B DE", (result) =>
+            _utils.SigScan("73 ?? 66 83 FB 20", (result) =>
             {
                 Memory.Instance.SafeWrite(result, (ushort)0x9090);
             });
 
-            _utils.SigScan("0F 83 ?? ?? ?? ?? 66 83 F8 01", (result) =>
+            _utils.SigScan("0F 83 ?? ?? ?? ?? 66 41 83 F9 01", (result) =>
             {
                 Memory.Instance.SafeWrite(result, (ushort)0x9090);
                 Memory.Instance.SafeWrite(result + 2, (uint)0x90909090);
@@ -190,13 +189,13 @@ namespace Unhardcoded_P5R
                 Memory.Instance.SafeWrite(chatIconLimit, (byte)0xeb);
             });
 
-            utils.SigScan("8D 04 ?? BA 10 00 00 00 C1 E0 04 8B C8", "chatParamAlloc", (result) =>
+            utils.SigScan("8D 04 ?? C1 E0 04 8B C8 8B D8 E8 ?? ?? ?? ?? 8B D3", "chatParamAlloc", (result) =>
             {
                 string[] asm =
                 {
                     $"use64",
                     _hooks.Utilities.GetAbsoluteCallMnemonics(_createExpandedChatNameList, out var reverseWrapper),
-                    "mov rdi, rax"
+                    "mov rsi, rax"
                 };
 
                 _asmHookWrappers.Add(new AsmHookWrapper
@@ -252,6 +251,7 @@ namespace Unhardcoded_P5R
 
             foreach (var param in iconParams)
             {
+                _utils.DebugLog("Read chat entry with ID: " + param.Id);
                 _chatIconParamIdDict[param.Id] = param;
             }
         }
@@ -285,7 +285,7 @@ namespace Unhardcoded_P5R
             foreach (var entry in _chatIconParamIdDict.Values)
             {
                 if (_expandedChatIconParamDict.TryAdd(numOfEntries, entry))
-                    _utils.Log($"Adding Chat ID {numOfEntries}");
+                    _utils.Log($"Registering Chat ID {numOfEntries}");
                 numOfEntries++;
             }
 
