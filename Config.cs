@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Unhardcoded_P5R.Template.Configuration;
 
 namespace Unhardcoded_P5R.Configuration
@@ -57,7 +56,7 @@ namespace Unhardcoded_P5R.Configuration
         public bool SelCutinHooks { get; set; } = true;
 
         [DisplayName("Field Model Num Module")]
-        [Description("Field Model Module Placeholder description")]
+        [Description("Unhardcodes Field model num table in favor of checking for a field model files existence.")]
         [DefaultValue(true)]
         public bool FieldModelNumHooks { get; set; } = true;
     }
