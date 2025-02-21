@@ -44,7 +44,7 @@ namespace Unhardcoded_P5R
         private readonly List<AsmHookWrapper> asmHookWrappers = new();
 
         private readonly Dictionary<int, LmapDestination> _lmapDestinationDict = new();
-        private List<LmapSilhouetteImageFields> _lmapSilhouetteImageFields;
+        private List<LmapSilhouetteImageFields> _lmapSilhouetteImageFields = new();
 
         nint lmapParamTable;
         internal LmapHooks(IReloadedHooks hooks, Utils utils)
@@ -142,7 +142,7 @@ namespace Unhardcoded_P5R
                 });
             });
 
-            utils.SigScan("83 F8 FF 74 ?? 48 63 C8 45 33 C0 89 83 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 49 8B 8C", "LoadMap_l_Image", (result) => // Load Map L silhouette image 0x14135c9b6
+            utils.SigScan("83 F8 FF 74 ?? 48 63 C8 45 33 C0 89 83 ?? ?? ?? ?? 89 83 ?? ?? ?? ?? 49 8B 8C", "LoadMap_l_Image", (result) => // Load Map L silhouette image 0x1412560af
             {
                 string[] asm =
                 {
@@ -270,7 +270,7 @@ namespace Unhardcoded_P5R
         internal int GetLmapSilhouetteImage(int fileNameIndex, LmapImageInfo* lmapImageInfo)
         {
             var field = _getFieldWork()->FieldInfo->Field;
-
+            
             foreach (var image in _lmapSilhouetteImageFields)
             {
                 foreach (var fieldId in image.Fields)
