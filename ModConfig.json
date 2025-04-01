@@ -2,7 +2,7 @@
   "ModId": "p5rpc.unhardcodedp5r",
   "ModName": "P5R Unhardcoded Toolkit",
   "ModAuthor": "SecreC.",
-  "ModVersion": "2.0.1",
+  "ModVersion": "2.0.2",
   "ModDescription": "A Project to Unhardcode as many aspects of p5r as possible by making the game read data from external files",
   "ModDll": "Unhardcoded_P5R.dll",
   "ModIcon": "Preview.png",
