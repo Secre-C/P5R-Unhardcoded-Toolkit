@@ -269,8 +269,10 @@ namespace Unhardcoded_P5R
 
         internal int GetLmapSilhouetteImage(int fileNameIndex, LmapImageInfo* lmapImageInfo)
         {
+            if (fileNameIndex == -1) return -1;
+
             var field = _getFieldWork()->FieldInfo->Field;
-            
+
             foreach (var image in _lmapSilhouetteImageFields)
             {
                 foreach (var fieldId in image.Fields)
